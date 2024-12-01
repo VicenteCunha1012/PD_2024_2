@@ -34,7 +34,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain openEndpointsFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("api/auth/register", "api/auth/list_usernames") // Applies to `/register`
+                .securityMatcher("api/auth/register") // Applies to `/register`
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll() // Allow everyone
@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/api/auth/login", "/api/auth/hello", "/api/auth/authorization") // Applies to `/login`
+                .securityMatcher("/api/auth/login") // Applies to `/login`
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated() // Require authentication
@@ -54,17 +54,31 @@ public class SecurityConfig {
                 .build();
     }
 
+    /*@Bean
+    public SecurityFilterChain bearerTokenFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/api/groups/**")
+                //.csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/groups/**").authenticated() // Authenticated users only
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .build();
+    }*/
+
     @Bean
     public SecurityFilterChain bearerTokenFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/groups/**")
-                .csrf(Customizer.withDefaults())
+                .securityMatcher("/api/groups/**") // Matches /api/groups/** paths
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/groups/**").authenticated() // Authenticated users only
+                        .anyRequest().authenticated() // Authenticated users only
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
+
 
 
 }

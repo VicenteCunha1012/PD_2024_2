@@ -22,20 +22,9 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-
-    @GetMapping("/list_usernames")
-    public ResponseEntity list_usernames() {
-        try {
-            return new ResponseEntity(
-                    DatabaseUtils.GetUserList(Database.database.getConn()),
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return new ResponseEntity(
-                    e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
+    @GetMapping("/test_bearer")
+    public ResponseEntity testBearer(){
+        return new ResponseEntity("bem vindo", HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -43,10 +32,7 @@ public class AuthController {
         boolean result;
         try {
             result = DatabaseUtils.registar(
-                    user.getName(),
-                    user.getContact(),
-                    user.getEmail(),
-                    Hasher.hashString(user.getPassword()),
+                    Hasher.HashUserPass(user),
                     Database.database.getConn()
             );
         } catch (Exception e) {

@@ -62,14 +62,14 @@ public class ClientUI {
 
                 phoneNumber = IO.readString("  Telefone > ", false);
 
-                password = Hasher.hashString(IO.readString("  Palavra-passe > ", false));
+                password = Hasher.HashString(IO.readString("  Palavra-passe > ", false));
 
                 break;
             case 2:
 
                 email = IO.readString("  Email > ", false);
 
-                password = Hasher.hashString(IO.readString("  Palavra-passe > ", false));
+                password = Hasher.HashString(IO.readString("  Palavra-passe > ", false));
 
 
                 break;
@@ -111,7 +111,7 @@ public class ClientUI {
                 System.out.println("Se não quiser mudar os valores, repita-os");
                 fullName = IO.readString("  Nome completo > ", false);
                 phoneNumber = IO.readString("  Telefone > ", true);
-                password = Hasher.hashString(IO.readString("  Palavra-passe > ", false));
+                password = Hasher.HashString(IO.readString("  Palavra-passe > ", false));
 
                 break;
 

@@ -1,5 +1,7 @@
 package pt.isec.pd.Shared;
 
+import pt.isec.pd.Shared.Entities.User;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -13,7 +15,7 @@ public class Hasher {
      * @param input é hashed com o SHA-256
      * @return é o input depois de ser hashed
      */
-    public static String hashString(String input) {
+    public static String HashString(String input) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -24,5 +26,15 @@ public class Hasher {
         byte[] hashBytes = digest.digest(input.getBytes());
 
         return Base64.getEncoder().encodeToString(hashBytes);
+    }
+
+    public static User HashUserPass(User user) {
+        return new User(
+                user.getCreation_Date(),
+                user.getName(),
+                user.getContact(),
+                user.getEmail(),
+                Hasher.HashString(user.getPassword())
+        );
     }
 }

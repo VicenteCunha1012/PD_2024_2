@@ -33,7 +33,6 @@ public class MainServer {
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        // Build the RSA JWK with your public and private keys
         JWK rsaJwk = new RSAKey.Builder(rsaKeysProperties.publicKey())  // Public key
                 .privateKey(rsaKeysProperties.privateKey())  // Private key
                 .build();
@@ -51,10 +50,7 @@ public class MainServer {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        // Use the public key for verification
-        JWK jwk = new RSAKey.Builder(rsaKeysProperties.publicKey())
-                .build();
-
+        // Directly use the public key for RSA verification
         return NimbusJwtDecoder.withPublicKey(rsaKeysProperties.publicKey()).build();
     }
 

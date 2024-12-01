@@ -1,5 +1,6 @@
 package pt.isec.pd.Server.Data;
 
+import org.springframework.security.core.parameters.P;
 import pt.isec.pd.Shared.Entities.*;
 
 import java.sql.Connection;
@@ -25,14 +26,14 @@ public class DatabaseUtils {
     }
 
     // TODO fazer...
-    public static boolean registar(String name, String contact, String email, String password, Connection conn) throws Exception {
+    public static boolean registar(User user, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
 
-        args.add(name);
-        args.add(contact);
-        args.add(email);
-        args.add(password);
+        args.add(user.getName());
+        args.add(user.getContact());
+        args.add(user.getEmail());
+        args.add(user.getPassword());
 
         psw = new PreparedStatementWrapper(
                 "INSERT INTO users (name, contact, email, password)" +
@@ -125,6 +126,24 @@ public class DatabaseUtils {
         resultSet.next();
 
         return resultSet.getInt("id");
+    }
+
+    //TODO
+    public static boolean AddExpenseToGroup(String groupName, Expense expense, Connection conn) throws Exception {
+        resetAttributes();
+        psw = new PreparedStatementWrapper(
+                "INSERT INTO expenses"
+        );
+        return true;
+    }
+
+    //TODO
+    public static boolean DeleteExpenseFromGroup(String groupName, Integer expenseId, Connection conn) throws Exception {
+        resetAttributes();
+        psw = new PreparedStatementWrapper(
+                "DELETE FROM expenses"
+        );
+        return true;
     }
 
     public static List<ListedExpense> GetExpenseListFromGroup(String groupName, Connection conn) throws Exception {

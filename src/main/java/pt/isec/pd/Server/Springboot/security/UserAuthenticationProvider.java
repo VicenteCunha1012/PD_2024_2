@@ -23,7 +23,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
         String username = authentication.getName();
-        String password = Hasher.hashString(authentication.getCredentials().toString());
+        String password = Hasher.HashString(authentication.getCredentials().toString());
 
 
         System.out.println("bro tao a tentar entrar no teu sistema com " + username + " " + password);

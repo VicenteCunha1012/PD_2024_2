@@ -22,10 +22,6 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping("/test_bearer")
-    public ResponseEntity testBearer(){
-        return new ResponseEntity("bem vindo", HttpStatus.OK);
-    }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody User user) {

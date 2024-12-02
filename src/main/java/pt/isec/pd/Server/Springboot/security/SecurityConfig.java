@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,6 +18,9 @@ public class SecurityConfig {
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) {
@@ -31,13 +35,27 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 
+
+    @Bean
+    public SecurityFilterChain bearerTokenFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/api/groups/**")
+                //.csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/groups/**").authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(this.jwtDecoder)))
+                .build();
+    }
+
     @Bean
     public SecurityFilterChain openEndpointsFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("api/auth/register") // Applies to `/register`
+                .securityMatcher("api/auth/register")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Allow everyone
+                        .anyRequest().permitAll()
                 )
                 .build();
     }
@@ -45,37 +63,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/api/auth/login") // Applies to `/login`
+                .securityMatcher("/api/auth/login")
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated() // Require authentication
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()) // Enable Basic Authentication
-                .build();
-    }
-
-    /*@Bean
-    public SecurityFilterChain bearerTokenFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher("/api/groups/**")
-                //.csrf(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/groups/**").authenticated() // Authenticated users only
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .build();
-    }*/
-
-    @Bean
-    public SecurityFilterChain bearerTokenFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher("/api/groups/**") // Matches /api/groups/** paths
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated() // Authenticated users only
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 

@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -18,7 +20,7 @@ import pt.isec.pd.Server.Data.Database;
 import pt.isec.pd.Server.Springboot.security.RsaKeysProperties;
 
 import java.io.File;
-import java.sql.SQLException;
+import java.time.Instant;
 
 @SpringBootApplication
 @EnableConfigurationProperties(RsaKeysProperties.class)
@@ -33,26 +35,40 @@ public class MainServer {
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        JWK rsaJwk = new RSAKey.Builder(rsaKeysProperties.publicKey())  // Public key
-                .privateKey(rsaKeysProperties.privateKey())  // Private key
+        JWK rsaJwk = new RSAKey.Builder(rsaKeysProperties.publicKey())
+                .privateKey(rsaKeysProperties.privateKey())
                 .build();
 
-        // Create a JWK set with the created JWK
         JWKSet jwkSet = new JWKSet(rsaJwk);
 
-        // Create an ImmutableJWKSet (which implements JWKSource<SecurityContext>)
         ImmutableJWKSet<SecurityContext> jwkSource = new ImmutableJWKSet<>(jwkSet);
 
-        // Create and return the JwtEncoder
         return new NimbusJwtEncoder(jwkSource);
     }
 
 
+    /*
     @Bean
     public JwtDecoder jwtDecoder() {
-        // Directly use the public key for RSA verification
         return NimbusJwtDecoder.withPublicKey(rsaKeysProperties.publicKey()).build();
+    }*/
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(rsaKeysProperties.publicKey()).build();
+
+        jwtDecoder.setJwtValidator(token -> {
+            if (token.getExpiresAt().isBefore(Instant.now())) {
+
+                return OAuth2TokenValidatorResult.failure(new OAuth2Error("invalid_token", "Token expired", null));
+            }
+            return OAuth2TokenValidatorResult.success();
+        });
+
+        return jwtDecoder;
     }
+
 
 
     public static void main(String[] args) {

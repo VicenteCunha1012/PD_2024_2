@@ -25,9 +25,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider
         String username = authentication.getName();
         String password = Hasher.HashString(authentication.getCredentials().toString());
 
-
-        System.out.println("bro tao a tentar entrar no teu sistema com " + username + " " + password);
-
         boolean loginResult;
 
         try {

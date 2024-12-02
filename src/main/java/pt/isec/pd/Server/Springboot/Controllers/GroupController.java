@@ -12,7 +12,7 @@ import pt.isec.pd.Shared.Entities.Expense;
 @RequestMapping("api/groups")
 public class GroupController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity listGroups() {
         try {
             return new ResponseEntity(

@@ -9,6 +9,7 @@ public class ListedGroup {
     private int owner_id;
 
     public ListedGroup(Integer id, Date creation_date, String name, Integer owner_id) {
+        this.id = id;
         this.creation_date = creation_date;
         this.name = name;
         this.owner_id = owner_id;

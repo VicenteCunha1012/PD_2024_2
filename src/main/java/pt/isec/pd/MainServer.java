@@ -25,7 +25,7 @@ import java.time.Instant;
 @SpringBootApplication
 @EnableConfigurationProperties(RsaKeysProperties.class)
 @ConfigurationPropertiesScan
-public class MainServer {
+public class    MainServer {
 
     private RsaKeysProperties rsaKeysProperties;
 

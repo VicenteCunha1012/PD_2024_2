@@ -25,9 +25,13 @@ public class GroupController {
     }
 
     @PostMapping("{group}/expenses")
-    public ResponseEntity addGroupExpenses(
+    public ResponseEntity addExpenseToGroup(
             @PathVariable("group") String group,
             @RequestBody Expense expense) {
+        if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
         boolean result;
         try {
             result = DatabaseUtils.AddExpenseToGroup(group, expense, Database.database.getConn());
@@ -46,6 +50,9 @@ public class GroupController {
     public ResponseEntity listGroupExpenses(
             @PathVariable("group") String group
     ) {
+        if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         try {
             return new ResponseEntity(DatabaseUtils.GetExpenseListFromGroup(group, Database.database.getConn()), HttpStatus.OK);
         } catch (Exception e) {
@@ -58,6 +65,9 @@ public class GroupController {
             @PathVariable("group") String group,
             @PathVariable("expense_id") Integer expense_id
     ) {
+        if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         boolean result;
         try {
             result = DatabaseUtils.DeleteExpenseFromGroup(group, expense_id, Database.database.getConn());

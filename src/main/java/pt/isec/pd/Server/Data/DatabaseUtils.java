@@ -112,6 +112,22 @@ public class DatabaseUtils {
 
     }
 
+    public static boolean GroupExists(String groupName, Connection conn)  {
+        resetAttributes();
+        boolean result = false;
+        try {
+            for(ListedGroup listedGroup : DatabaseUtils.GetGroupList(conn)) {
+                if(listedGroup.getName().equals(groupName)) {
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+
+    }
+
     public static Integer GetGroupId(String groupName, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();

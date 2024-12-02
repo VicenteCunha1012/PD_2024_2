@@ -1,4 +1,4 @@
-package pt.isec.pd.ObservableClient;
+package pt.isec.pd;
 
 public class MainObservableClient {
     //ligar ao servico

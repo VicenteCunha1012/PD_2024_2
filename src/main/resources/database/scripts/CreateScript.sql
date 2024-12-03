@@ -140,6 +140,14 @@ CREATE TABLE expense_shares (
                                 group_id INTEGER REFERENCES groups(id)
 );
 
+CREATE TRIGGER delete_expense_shares
+    AFTER DELETE ON expenses
+    FOR EACH ROW
+BEGIN
+    DELETE FROM expense_shares
+    WHERE expense_id = OLD.id;
+END;
+
 ------------------------------------------------- Payments -------------------------------------------------------------
 
 CREATE TABLE payments (

@@ -4,22 +4,16 @@ import java.sql.Date;
 
 public class User {
     private int id;
-    private Date creation_Date;
     private String name;
     private String contact;
     private String email;
     private String password;
 
-    public User(Date creation_Date, String name, String contact, String email, String password) {
-        this.creation_Date = creation_Date;
+    public User(String nome, String contacto, String email, String password) {
         this.name = name;
         this.contact = contact;
         this.email = email;
         this.password = password;
-    }
-
-    public Date getCreation_Date() {
-        return creation_Date;
     }
 
     public String getName() {
@@ -35,7 +29,7 @@ public class User {
     }
 
     public String getPassword() {
-        return password; // TODO usar o Hasher
+        return password;
     }
 
 }

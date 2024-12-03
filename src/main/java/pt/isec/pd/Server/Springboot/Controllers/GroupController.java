@@ -60,7 +60,7 @@ public class GroupController {
     ) {
         boolean result;
         try {
-            result = DatabaseUtils.DeleteExpenseFromGroup(group, expense_id, Database.database.getConn());
+            result = DatabaseUtils.DeleteExpenseFromGroup(expense_id, Database.database.getConn());
         } catch (Exception e) {
             result = false;
         }

@@ -25,7 +25,6 @@ public class DatabaseUtils {
         statement = null;
     }
 
-    // TODO fazer...
     public static boolean registar(User user, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
@@ -45,14 +44,16 @@ public class DatabaseUtils {
 
         updateCount = statement.getUpdateCount();
 
-        return updateCount == 1;
+        return updateCount != -1;
     }
 
     public static boolean login(String username, String password, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
+
         args.add(username);
         args.add(password);
+
         psw = new PreparedStatementWrapper(
                 "SELECT * FROM users WHERE email = ? AND password = ?;",
                 args
@@ -67,8 +68,7 @@ public class DatabaseUtils {
     public static List<ListedUser> GetUserList(Connection conn) throws Exception {
         resetAttributes();
         psw = new PreparedStatementWrapper(
-                "SELECT * FROM users",
-                List.of()
+                "SELECT * FROM users"
         );
 
         ArrayList<ListedUser> users = new ArrayList<>();
@@ -86,15 +86,16 @@ public class DatabaseUtils {
                     ""
             ));
         }
+
         return users;
     }
 
     public static List<ListedGroup> GetGroupList(Connection conn) throws Exception {
         resetAttributes();
         psw = new PreparedStatementWrapper(
-                "SELECT * FROM groups",
-                List.of()
+                "SELECT * FROM groups"
         );
+
         ArrayList<ListedGroup> groups = new ArrayList<>();
 
         statement = psw.createPreparedStatement(conn);
@@ -108,6 +109,7 @@ public class DatabaseUtils {
                     resultSet.getInt("owner_id")
             ));
         }
+
         return groups;
 
     }
@@ -115,7 +117,9 @@ public class DatabaseUtils {
     public static Integer GetGroupId(String groupName, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
+
         args.add(groupName);
+
         psw = new PreparedStatementWrapper(
                 "SELECT id FROM groups WHERE name = ?;",
                 args
@@ -128,23 +132,46 @@ public class DatabaseUtils {
         return resultSet.getInt("id");
     }
 
-    //TODO
     public static boolean AddExpenseToGroup(String groupName, Expense expense, Connection conn) throws Exception {
         resetAttributes();
+        ArrayList<Object> args = new ArrayList<>();
+
+        args.add(expense.getDescription());
+        args.add(expense.getValue());
+        args.add(expense.getPaid_by());
+        args.add(DatabaseUtils.GetGroupId(groupName, conn));
+
         psw = new PreparedStatementWrapper(
-                "INSERT INTO expenses"
+                "INSERT INTO expenses (description, value, paid_by, group_id) " +
+                        "VALUES (?, ?, ?, ?);",
+                args
         );
-        return true;
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        updateCount = statement.getUpdateCount();
+
+        return updateCount != 1;
     }
 
-    //TODO
-    public static boolean DeleteExpenseFromGroup(String groupName, Integer expenseId, Connection conn) throws Exception {
+    public static boolean DeleteExpenseFromGroup(Integer expenseId, Connection conn) throws Exception {
         resetAttributes();
+
         psw = new PreparedStatementWrapper(
-                "DELETE FROM expenses"
+                "DELETE FROM expenses " +
+                        "WHERE id = ?;",
+                expenseId
         );
-        return true;
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        updateCount = statement.getUpdateCount();
+
+        return updateCount != -1;
     }
+
 
     public static List<ListedExpense> GetExpenseListFromGroup(String groupName, Connection conn) throws Exception {
         resetAttributes();
@@ -171,4 +198,4 @@ public class DatabaseUtils {
         return expenses;
     }
 
-  }
+}

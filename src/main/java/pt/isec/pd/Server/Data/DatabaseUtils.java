@@ -6,6 +6,7 @@ import pt.isec.pd.Shared.Entities.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,6 +129,30 @@ public class DatabaseUtils {
 
     }
 
+    public static boolean ExpenseExists(String groupName, Integer expenseId, Connection conn)  {
+        resetAttributes();
+        ArrayList<Object> args = new ArrayList<>();
+        try {
+            args.add(DatabaseUtils.GetGroupId(groupName, conn));
+        } catch (Exception e) {
+            return false;
+        }
+        args.add(expenseId);
+
+        try {
+            psw = new PreparedStatementWrapper(
+                    "SELECT * FROM expenses WHERE group_id = ? AND id = ?;",
+                    args
+            );
+
+            statement = psw.createPreparedStatement(conn);
+            resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static Integer GetGroupId(String groupName, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
@@ -153,13 +178,17 @@ public class DatabaseUtils {
         return true;
     }
 
-    //TODO
-    public static boolean DeleteExpenseFromGroup(String groupName, Integer expenseId, Connection conn) throws Exception {
+    //TODO nas funcoes a usar diretamente em endpoint nao por a dar throw para ficar mais limpinho
+    public static boolean DeleteExpenseFromGroup(String groupName, Integer expenseId, Connection conn) {
         resetAttributes();
-        psw = new PreparedStatementWrapper(
-                "DELETE FROM expenses"
-        );
-        return true;
+        try {
+            psw = new PreparedStatementWrapper(
+                    "DELETE FROM expenses"
+            );
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static List<ListedExpense> GetExpenseListFromGroup(String groupName, Connection conn) throws Exception {

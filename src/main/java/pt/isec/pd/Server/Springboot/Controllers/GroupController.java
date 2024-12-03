@@ -68,6 +68,9 @@ public class GroupController {
         if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        if(!DatabaseUtils.ExpenseExists(group, expense_id, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         boolean result;
         try {
             result = DatabaseUtils.DeleteExpenseFromGroup(group, expense_id, Database.database.getConn());

@@ -17,6 +17,8 @@ public class ServiceRegisterer {
         }
     }
 
+
+
     public static boolean BindRegistrationToImplementation(String registration, Remote implementation) {
         try {
             Naming.bind(registration, implementation);

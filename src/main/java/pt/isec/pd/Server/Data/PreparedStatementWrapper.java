@@ -13,6 +13,16 @@ import java.util.List;
 public class PreparedStatementWrapper implements Serializable {
     private String query;
     private List<Object> arguments;
+    private static ArrayList<PreparedStatement> statementsToFreeLater = new ArrayList<>();
+
+    public static void CloseAllPendingStatements() {
+        for(PreparedStatement ps : statementsToFreeLater) {
+            try {
+                ps.close();
+            } catch (SQLException e) {}
+        }
+        statementsToFreeLater.clear();
+    }
 
     public PreparedStatementWrapper(String query, List<Object> arguments) throws SQLException {
         this.query = query;
@@ -56,6 +66,7 @@ public class PreparedStatementWrapper implements Serializable {
             }
         }
 
+        statementsToFreeLater.add(preparedStatement);
         return preparedStatement;
     }
 

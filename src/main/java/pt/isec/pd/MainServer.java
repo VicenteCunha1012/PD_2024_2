@@ -17,9 +17,13 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import pt.isec.pd.Server.Data.Database;
+import pt.isec.pd.Server.Helper.ShutDown;
+import pt.isec.pd.Server.RMI.GetAppInfoImpl;
+import pt.isec.pd.Server.RMI.ServiceRegisterer;
 import pt.isec.pd.Server.Springboot.security.RsaKeysProperties;
 
 import java.io.File;
+import java.rmi.RemoteException;
 import java.time.Instant;
 
 @SpringBootApplication
@@ -72,6 +76,8 @@ public class    MainServer {
 
 
     public static void main(String[] args) {
+        String APP_INFO_URI = "rmi://localhost:1099/get_app_info";
+        boolean needsToRebind = false;
 
         if (args.length != 1) {
             System.out.println("Sintaxe java Servidor DBPath");
@@ -97,6 +103,40 @@ public class    MainServer {
             return;
         }
 
-        SpringApplication.run(MainServer.class, args);
+        ShutDown.sbAppContext =  SpringApplication.run(MainServer.class, args);
+
+        if(!ServiceRegisterer.CreateRegistry(1099)) {
+            System.out.println("Não foi possível exportar o registo, já deve ter sido criado.");
+        }
+
+        GetAppInfoImpl appInfoImpl;
+        try {
+            appInfoImpl = new GetAppInfoImpl();
+        } catch (RemoteException e) {
+            System.out.println("Não foi possível iniciar a implementação da GetAppInfo.");
+            ShutDown.shutDown();
+            return;
+        }
+
+        if(ServiceRegisterer.BindRegistrationToImplementation(APP_INFO_URI, appInfoImpl)) {
+            System.out.println("Implementação de GetAppInfo binded a " + APP_INFO_URI);
+        } else {
+            needsToRebind = true;
+            System.out.println("Não foi possível fazer bind da implementação de GetAppInfo a " + APP_INFO_URI + "... \n Vou tentar fazer rebind");
+        }
+        if(needsToRebind) {
+            if(ServiceRegisterer.RebindRegistrationToImplementation(APP_INFO_URI, appInfoImpl)) {
+                System.out.println("Deu para fazer rebind. A implementação de GetAppInfo está binded a " + APP_INFO_URI);
+            } else {
+                System.out.println("Não foi possível fazer bind nem rebind a " + APP_INFO_URI);
+                ShutDown.shutDown();
+                return;
+            }
+        }
+
+
+
+
+
     }
 }

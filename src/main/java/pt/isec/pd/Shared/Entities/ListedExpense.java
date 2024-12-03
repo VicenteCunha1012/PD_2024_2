@@ -1,8 +1,9 @@
 package pt.isec.pd.Shared.Entities;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class ListedExpense {
+public class ListedExpense implements Serializable {
     private int id;
     private Date creation_date;
     private String description;

@@ -1,8 +1,9 @@
 package pt.isec.pd.Shared.Entities;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class ListedGroup {
+public class ListedGroup implements Serializable {
     private Integer id;
     private Date creation_date;
     private String name;
@@ -27,5 +28,10 @@ public class ListedGroup {
 
     public Integer getOwner_id() {
         return owner_id;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ID: %d, Nome: %s, Data de criação: %s, ID do Dono: %d", id, name, creation_date, owner_id);
     }
 }

@@ -1,8 +1,9 @@
 package pt.isec.pd.Shared.Entities;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class ListedUser {
+public class ListedUser implements Serializable {
     private Integer id;
     private Date creation_Date;
     private String name;
@@ -11,6 +12,7 @@ public class ListedUser {
     private String password;
 
     public ListedUser(Integer id, Date creation_Date, String name, String contact, String email, String password) {
+        this.id = id;
         this.creation_Date = creation_Date;
         this.name = name;
         this.contact = contact;
@@ -40,4 +42,8 @@ public class ListedUser {
         return password; // TODO usar o Hasher
     }
 
+    @Override
+    public String toString() {
+        return String.format("ID: %d, Nome: %s, Contacto: %s, Email: %s",id, name, contact, email);
+    }
 }

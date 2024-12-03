@@ -170,7 +170,7 @@ public class DatabaseUtils {
     }
 
     //TODO
-    public static boolean AddExpenseToGroup(String groupName, Expense expense, Connection conn) throws Exception {
+    public static boolean AddExpenseToGroup(String email,String groupName, Expense expense, Connection conn) throws Exception {
         resetAttributes();
         psw = new PreparedStatementWrapper(
                 "INSERT INTO expenses"
@@ -189,6 +189,38 @@ public class DatabaseUtils {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static boolean IsUserInGroup(String email, String groupName, Connection conn) {
+        try {
+            Integer userId = GetUserId(email, conn);
+            Integer groupId = GetGroupId(groupName, conn);
+            ArrayList<Object> args = new ArrayList<>();
+            args.add(groupId);
+            args.add(userId);
+            psw = new PreparedStatementWrapper(
+                    "SELECT * FROM group_members WHERE group_id = ? AND user_id = ?;",
+                    args
+            );
+            statement = psw.createPreparedStatement(conn);
+            resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static Integer GetUserId(String email, Connection conn) throws Exception {
+        resetAttributes();
+        psw = new PreparedStatementWrapper(
+                "SELECT id FROM users WHERE email = ?;",
+                List.of(email)
+        );
+
+        statement = psw.createPreparedStatement(conn);
+        resultSet = statement.executeQuery();
+        if(!resultSet.next()) throw new Exception("user email not found");
+        return resultSet.getInt("id");
     }
 
     public static List<ListedExpense> GetExpenseListFromGroup(String groupName, Connection conn) throws Exception {

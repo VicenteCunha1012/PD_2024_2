@@ -2,6 +2,8 @@ package pt.isec.pd.Server.Springboot.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.isec.pd.Server.Data.Database;
 import pt.isec.pd.Server.Data.DatabaseUtils;
@@ -24,6 +26,7 @@ public class GroupController {
         }
     }
 
+    //criar despesa no grupo
     @PostMapping("{group}/expenses")
     public ResponseEntity addExpenseToGroup(
             @PathVariable("group") String group,
@@ -31,10 +34,16 @@ public class GroupController {
         if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        //se o grupo existir
+        String userEmail = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject();
+        if(!DatabaseUtils.IsUserInGroup(userEmail, group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        //se o user tiver acesso ao grupo
 
         boolean result;
         try {
-            result = DatabaseUtils.AddExpenseToGroup(group, expense, Database.database.getConn());
+            result = DatabaseUtils.AddExpenseToGroup(userEmail, group, expense, Database.database.getConn());
         } catch (Exception e) {
             result = false;
         }
@@ -46,6 +55,7 @@ public class GroupController {
         }
     }
 
+    //receber a lista de despesas de um grupo
     @GetMapping("{group}/expenses")
     public ResponseEntity listGroupExpenses(
             @PathVariable("group") String group
@@ -53,6 +63,12 @@ public class GroupController {
         if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        //se o grupo existir
+        String userEmail = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject();
+        if(!DatabaseUtils.IsUserInGroup(userEmail, group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        //se o user tiver acesso ao grupo
         try {
             return new ResponseEntity(DatabaseUtils.GetExpenseListFromGroup(group, Database.database.getConn()), HttpStatus.OK);
         } catch (Exception e) {
@@ -60,6 +76,7 @@ public class GroupController {
         }
     }
 
+    //apagar a despesa de um grupo
     @DeleteMapping("{group}/{expense_id}")
     public ResponseEntity deleteGroupExpenses(
             @PathVariable("group") String group,
@@ -68,9 +85,16 @@ public class GroupController {
         if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        //se o grupo existir
         if(!DatabaseUtils.ExpenseExists(group, expense_id, Database.database.getConn())) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        //se a despesa existir
+        String userEmail = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject();
+        if(!DatabaseUtils.IsUserInGroup(userEmail, group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        //se o user tiver acesso ao grupo
         boolean result;
         try {
             result = DatabaseUtils.DeleteExpenseFromGroup(group, expense_id, Database.database.getConn());

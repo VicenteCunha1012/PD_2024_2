@@ -236,19 +236,22 @@ public class DatabaseUtils {
 
         return updateCount != 1;
     }
-
-    public static boolean DeleteExpenseFromGroup(Integer expenseId, Connection conn) throws Exception {
     //TODO nas funcoes a usar diretamente em endpoint nao por a dar throw para ficar mais limpinho
-    public static boolean DeleteExpenseFromGroup(String groupName, Integer expenseId, Connection conn) {
+    public static boolean DeleteExpenseFromGroup(Integer expenseId, Connection conn) throws Exception {
         resetAttributes();
-        try {
-            psw = new PreparedStatementWrapper(
-                    "DELETE FROM expenses"
-            );
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+
+        psw = new PreparedStatementWrapper(
+                "DELETE FROM expenses " +
+                        "WHERE id = ?;",
+                expenseId
+        );
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        updateCount = statement.getUpdateCount();
+
+        return updateCount != -1;
     }
 
     public static boolean IsUserInGroup(String email, String groupName, Connection conn) {
@@ -281,19 +284,6 @@ public class DatabaseUtils {
         resultSet = statement.executeQuery();
         if(!resultSet.next()) throw new Exception("user email not found");
         return resultSet.getInt("id");
-
-        psw = new PreparedStatementWrapper(
-                "DELETE FROM expenses " +
-                        "WHERE id = ?;",
-                expenseId
-        );
-
-        statement = psw.createPreparedStatement(conn);
-        statement.execute();
-
-        updateCount = statement.getUpdateCount();
-
-        return updateCount != -1;
     }
 
 

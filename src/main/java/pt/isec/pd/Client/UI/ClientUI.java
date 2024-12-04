@@ -146,6 +146,7 @@ public class ClientUI {
                 default:
                     break;
             }
+            return;
         }
 
         System.out.println("\n +--------------------------- Os meus Grupos ---------------------------+ ");

@@ -48,7 +48,7 @@ public class GroupController {
 
         boolean result;
         try {
-            result = DatabaseUtils.AddExpenseToGroup(userEmail, group, expense, Database.database.getConn());
+            result = DatabaseUtils.AddExpenseToGroup(group, expense, Database.database.getConn());
         } catch (Exception e) {
             result = false;
         }
@@ -107,7 +107,7 @@ public class GroupController {
         //se o user tiver acesso ao grupo
         boolean result;
         try {
-            result = DatabaseUtils.DeleteExpenseFromGroup(group, expense_id, Database.database.getConn());
+            result = DatabaseUtils.DeleteExpenseFromGroup(expense_id, Database.database.getConn());
         } catch (Exception e) {
             result = false;
         }

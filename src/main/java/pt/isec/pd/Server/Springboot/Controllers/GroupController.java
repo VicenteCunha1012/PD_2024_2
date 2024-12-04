@@ -21,12 +21,15 @@ public class GroupController {
 
     @GetMapping("")
     public ResponseEntity listGroups() {
+        String userEmail = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject();
+
         try {
             return new ResponseEntity(
-                    DatabaseUtils.GetGroupList(Database.database.getConn()),
+                    DatabaseUtils.GetUserGroupList(userEmail, Database.database.getConn()),
                     HttpStatus.OK
             );
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

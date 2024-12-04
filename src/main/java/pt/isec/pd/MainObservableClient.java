@@ -20,8 +20,8 @@ public class MainObservableClient {
     //ver se da pra fazer so com um thread
     //se nao é a vida
     public static void main(String[] args) {
-        if(args.length != 1) {
-            System.out.println("Sintaxe java MainObservableClient rmi_uri");
+        if(args.length != 2) {
+            System.out.println("Sintaxe java MainObservableClient get_app_info_rmi_uri update_server_rmi");
         }
         GetAppInfo remoteAppInfoImpl = RMIHelper.GetRemoteReference(args[0]);
         NotificationServer remoteNotiServerImpl = RMIHelper.GetRemoteReference(args[1]);

@@ -99,19 +99,26 @@ public class DatabaseUtils {
         resetAttributes();
 
         psw = new PreparedStatementWrapper(
-                "SELECT" +
-                        "    g.id AS group_id," +
-                        "    g.name AS group_name," +
-                        "    g.creation_date AS group_creation_date," +
-                        "    u.email AS user_email" +
-                        "FROM" +
-                        "    groups g" +
-                        "JOIN" +
-                        "    group_members gm ON g.id = gm.group_id" +
-                        "JOIN" +
-                        "    users u ON gm.user_id = u.id" +
-                        "WHERE" +
-                        "    u.email = 'user@example.com';",
+                """
+                     SELECT g.id group_id, g.name group_name, g.creation_date group_creation_date, u.email user_email
+                     FROM groups g 
+                     JOIN group_members gm ON g.id = gm.group_id 
+                     JOIN users u ON gm.user_id = u.id 
+                     WHERE u.email = ?;  
+                        """,
+//                "SELECT" +
+//                        "    g.id AS group_id," +
+//                        "    g.name AS group_name," +
+//                        "    g.creation_date AS group_creation_date," +
+//                        "    u.email AS user_email" +
+//                        "FROM" +
+//                        "    groups g" +
+//                        "JOIN" +
+//                        "    group_members gm ON g.id = gm.group_id" +
+//                        "JOIN" +
+//                        "    users u ON gm.user_id = u.id" +
+//                        "WHERE" +
+//                        "    u.email = 'user@example.com';",
                 email
         );
 

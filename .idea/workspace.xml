@@ -7,9 +7,10 @@
     <list default="true" id="76632e96-2a90-4769-9481-3fd73b0fc04a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainObservableClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainObservableClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,12 +20,24 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;VicenteCunha1012&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/VicenteCunha1012/PD_2024_2.git&quot;,
+    &quot;accountId&quot;: &quot;7fc1baa4-2fc1-4f71-b15d-56b9b99a4337&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" root0="SKIP_INSPECTION" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2plMNcLSypUjL4JxsZHT2d4F7TU" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -33,13 +46,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.MainObservableClient.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.MainServer.executor": "Run",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "vicente",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/joaoa/Desktop/Escola/Projetos/ProjectPD - Java/Meta_1/Code",
     "node.js.detected.package.eslint": "true",
@@ -49,18 +64,26 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.MainClient">
+  <component name="RunManager" selected="Spring Boot.MainServer">
     <configuration name="MainClient" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="pt.isec.pd.MainClient" />
-      <module name="PD-2-testes" />
+      <module name="PD_2024_2" />
       <option name="PROGRAM_PARAMETERS" value="localhost 8080" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MainObservableClient" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="pt.isec.pd.MainObservableClient" />
+      <module name="PD_2024_2" />
+      <option name="PROGRAM_PARAMETERS" value="rmi://localhost:1099/get_app_info rmi://localhost:1100/update_server" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="MainServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="PD-2-testes" />
+      <module name="PD_2024_2" />
       <option name="PROGRAM_PARAMETERS" value="src/main/resources/database/database.sqlite" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="pt.isec.pd.MainServer" />
       <method v="2">
@@ -69,14 +92,15 @@
     </configuration>
     <list>
       <item itemvalue="Application.MainClient" />
+      <item itemvalue="Application.MainObservableClient" />
       <item itemvalue="Spring Boot.MainServer" />
     </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
       </set>
     </attachedChunks>
   </component>
@@ -89,6 +113,7 @@
       <option name="presentableId" value="Default" />
       <updated>1733336169998</updated>
       <workItem from="1733336171058" duration="327000" />
+      <workItem from="1733337249231" duration="947000" />
     </task>
     <servers />
   </component>

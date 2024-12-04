@@ -7,7 +7,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pt.isec.pd.Server.Data.Database;
 import pt.isec.pd.Server.Data.DatabaseUtils;
+import pt.isec.pd.Server.Helper.Helper;
+import pt.isec.pd.Server.RMI.NotificationServerImpl;
+import pt.isec.pd.Server.RMI.UpdatableType;
 import pt.isec.pd.Shared.Entities.Expense;
+
+import java.rmi.RemoteException;
 
 
 @RestController
@@ -49,6 +54,11 @@ public class GroupController {
         }
 
         if(result) {
+            try {
+                NotificationServerImpl.instance.notifyObservers(Helper.BuildNotificationMessage(UpdatableType.EXPENSE_ADDED, userEmail));
+            } catch (RemoteException e) {
+                System.out.println("Não foi possível notificar os observers.");
+            }
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -103,6 +113,11 @@ public class GroupController {
         }
 
         if(result) {
+            try {
+                NotificationServerImpl.instance.notifyObservers(Helper.BuildNotificationMessage(UpdatableType.EXPENSE_DELETED, userEmail));
+            } catch (RemoteException e) {
+                System.out.println("Não foi possível notificar os observers.");
+            }
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -17,8 +17,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import pt.isec.pd.Server.Data.Database;
-import pt.isec.pd.Server.Helper.ShutDown;
+import pt.isec.pd.Server.Helper.Helper;
 import pt.isec.pd.Server.RMI.GetAppInfoImpl;
+import pt.isec.pd.Server.RMI.NotificationServerImpl;
 import pt.isec.pd.Server.RMI.ServiceRegisterer;
 import pt.isec.pd.Server.Springboot.security.RsaKeysProperties;
 
@@ -75,9 +76,11 @@ public class    MainServer {
 
 
 
+
+
     public static void main(String[] args) {
         String APP_INFO_URI = "rmi://localhost:1099/get_app_info";
-        boolean needsToRebind = false;
+        String NOTIFICATION_SERVER = "rmi://localhost:1100/update_server";
 
         if (args.length != 1) {
             System.out.println("Sintaxe java Servidor DBPath");
@@ -103,36 +106,48 @@ public class    MainServer {
             return;
         }
 
-        ShutDown.sbAppContext =  SpringApplication.run(MainServer.class, args);
+        Helper.sbAppContext =  SpringApplication.run(MainServer.class, args);
 
-        if(!ServiceRegisterer.CreateRegistry(1099)) {
+        if(!ServiceRegisterer.CreateRegistry(1099) || !ServiceRegisterer.CreateRegistry(1100)) {
             System.out.println("Não foi possível exportar o registo, já deve ter sido criado.");
         }
 
         GetAppInfoImpl appInfoImpl;
         try {
             appInfoImpl = new GetAppInfoImpl();
+            NotificationServerImpl.instance = new NotificationServerImpl();
         } catch (RemoteException e) {
-            System.out.println("Não foi possível iniciar a implementação da GetAppInfo.");
-            ShutDown.shutDown();
+            System.out.println("Não foi possível iniciar uma ou mais implementações.");
+            Helper.shutDown();
             return;
         }
 
         if(ServiceRegisterer.BindRegistrationToImplementation(APP_INFO_URI, appInfoImpl)) {
             System.out.println("Implementação de GetAppInfo binded a " + APP_INFO_URI);
         } else {
-            needsToRebind = true;
-            System.out.println("Não foi possível fazer bind da implementação de GetAppInfo a " + APP_INFO_URI + "... \n Vou tentar fazer rebind");
-        }
-        if(needsToRebind) {
             if(ServiceRegisterer.RebindRegistrationToImplementation(APP_INFO_URI, appInfoImpl)) {
                 System.out.println("Deu para fazer rebind. A implementação de GetAppInfo está binded a " + APP_INFO_URI);
             } else {
                 System.out.println("Não foi possível fazer bind nem rebind a " + APP_INFO_URI);
-                ShutDown.shutDown();
+                Helper.shutDown();
+                return;
+            }
+            System.out.println("Não foi possível fazer bind da implementação de GetAppInfo a " + APP_INFO_URI + "... \n Vou tentar fazer rebind");
+        }
+
+        if(ServiceRegisterer.BindRegistrationToImplementation(NOTIFICATION_SERVER, NotificationServerImpl.instance)) {
+            System.out.println("Implementação de NotificationServer binded a " + NOTIFICATION_SERVER);
+        } else {
+            if(ServiceRegisterer.RebindRegistrationToImplementation(NOTIFICATION_SERVER, NotificationServerImpl.instance)) {
+                System.out.println("Deu para fazer rebind. A implementação de NotificationServer está binded a "+ NOTIFICATION_SERVER);
+            } else {
+                System.out.println("Não foi possível fazer bind nem rebind a " + NOTIFICATION_SERVER);
+                Helper.shutDown();
                 return;
             }
         }
+
+
 
 
 

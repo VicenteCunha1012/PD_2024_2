@@ -13,10 +13,11 @@ import pt.isec.pd.Shared.Entities.Expense;
 public class GroupController {
 
     @GetMapping("/")
-    public ResponseEntity listGroups() {
+    public ResponseEntity listGroups(
+            @RequestBody String email) {
         try {
             return new ResponseEntity(
-                    DatabaseUtils.GetGroupList(Database.database.getConn()),
+                    DatabaseUtils.GetUserGroupList(email, Database.database.getConn()),
                     HttpStatus.OK
             );
         } catch (Exception e) {

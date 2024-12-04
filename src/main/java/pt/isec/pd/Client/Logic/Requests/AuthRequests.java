@@ -52,12 +52,12 @@ public class AuthRequests {
         }
     }
 
-    public static String login(String username, String password, String url) {
+    public static String login(String email, String password, String url) {
         String requestUrl = url + URL + "/login";
 
         try {
             String basicAuthHeader = "Basic " + Base64.getEncoder()
-                    .encodeToString((username + ":" + password).getBytes());
+                    .encodeToString((email + ":" + password).getBytes());
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()

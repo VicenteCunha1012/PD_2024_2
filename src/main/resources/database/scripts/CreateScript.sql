@@ -5,7 +5,8 @@ CREATE TABLE users (
                        name            TEXT    NOT NULL,
                        contact         TEXT    NOT NULL    CONSTRAINT user_pk_2    UNIQUE,
                        email           TEXT    NOT NULL    CONSTRAINT user_pk_3    UNIQUE,
-                       password        TEXT    NOT NULL
+                       password        TEXT    NOT NULL,
+                       target_group_id INTEGER REFERENCES groups(id) DEFAULT NULL
 );
 
 ------------------------------------------------- Groups ---------------------------------------------------------------

@@ -8,6 +8,8 @@ public class ListedGroup {
     private String name;
     private int owner_id;
 
+    public ListedGroup() {}
+
     public ListedGroup(Integer id, Date creation_date, String name, Integer owner_id) {
         this.creation_date = creation_date;
         this.name = name;

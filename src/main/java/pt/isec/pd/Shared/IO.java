@@ -1,5 +1,6 @@
 package pt.isec.pd.Shared;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**

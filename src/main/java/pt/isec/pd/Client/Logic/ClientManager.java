@@ -5,7 +5,8 @@ import pt.isec.pd.Shared.AccessLevel;
 public class ClientManager {
     private String url;
     private String token;
-    private int targetGroup_id;
+    private String email;
+    private String targetGroupName;
     private AccessLevel accessLevel;
 
     public ClientManager(String ip, int port) {
@@ -25,12 +26,20 @@ public class ClientManager {
         this.token = token;
     }
 
-    public int getTargetGroup_id() {
-        return targetGroup_id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setTargetGroup_id(int targetGroup_id) {
-        this.targetGroup_id = targetGroup_id;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTargetGroupName() {
+        return targetGroupName;
+    }
+
+    public void setTargetGroupName(String targetGroupName) {
+        this.targetGroupName = targetGroupName;
     }
 
     public AccessLevel getAccessLevel() {

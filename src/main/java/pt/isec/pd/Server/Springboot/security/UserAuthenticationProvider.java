@@ -21,23 +21,23 @@ public class UserAuthenticationProvider implements AuthenticationProvider
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
-        String username = authentication.getName();
+        String email = authentication.getName();
         String password = Hasher.HashString(authentication.getCredentials().toString());
 
 
-        System.out.println("bro tao a tentar entrar no teu sistema com " + username + " " + password);
+        System.out.println("bro tao a tentar entrar no teu sistema com " + email + " " + password);
 
         boolean loginResult;
 
         try {
-            loginResult = DatabaseUtils.login(username, password, Database.database.getConn());
+            loginResult = DatabaseUtils.login(email, password, Database.database.getConn());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             loginResult = false;
         }
 
         if (loginResult) {
-            return new UsernamePasswordAuthenticationToken(username, password, List.of());
+            return new UsernamePasswordAuthenticationToken(email, password, List.of());
         }
         System.out.println("nao logged in");
         return null;

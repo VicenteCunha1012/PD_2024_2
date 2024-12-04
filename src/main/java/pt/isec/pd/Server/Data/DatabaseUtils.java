@@ -6,6 +6,7 @@ import pt.isec.pd.Shared.Hasher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,15 +48,15 @@ public class DatabaseUtils {
         return updateCount != -1;
     }
 
-    public static boolean login(String username, String password, Connection conn) throws Exception {
+    public static boolean login(String email, String password, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
 
-        args.add(username);
+        args.add(email);
         args.add(password);
 
         psw = new PreparedStatementWrapper(
-                "SELECT * FROM users WHERE name = ? AND password = ?;",
+                "SELECT * FROM users WHERE email = ? AND password = ?;",
                 args
         );
 
@@ -93,8 +94,47 @@ public class DatabaseUtils {
         return users;
     }
 
+    public static List<ListedGroup> GetUserGroupList(String email, Connection conn) throws Exception {
+        resetAttributes();
+
+        psw = new PreparedStatementWrapper(
+                "SELECT" +
+                        "    g.id AS group_id," +
+                        "    g.name AS group_name," +
+                        "    g.creation_date AS group_creation_date," +
+                        "    u.email AS user_email" +
+                        "FROM" +
+                        "    groups g" +
+                        "JOIN" +
+                        "    group_members gm ON g.id = gm.group_id" +
+                        "JOIN" +
+                        "    users u ON gm.user_id = u.id" +
+                        "WHERE" +
+                        "    u.email = 'user@example.com';",
+                email
+        );
+
+        ArrayList<ListedGroup> groups = new ArrayList<>();
+
+        statement = psw.createPreparedStatement(conn);
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            groups.add(new ListedGroup(
+                    resultSet.getInt("id"),
+                    resultSet.getDate("creation_date"),
+                    resultSet.getString("name"),
+                    resultSet.getInt("owner_id")
+            ));
+        }
+
+        return groups;
+
+    }
+
     public static List<ListedGroup> GetGroupList(Connection conn) throws Exception {
         resetAttributes();
+
         psw = new PreparedStatementWrapper(
                 "SELECT * FROM groups"
         );
@@ -119,13 +159,10 @@ public class DatabaseUtils {
 
     public static Integer GetGroupId(String groupName, Connection conn) throws Exception {
         resetAttributes();
-        ArrayList<Object> args = new ArrayList<>();
-
-        args.add(groupName);
 
         psw = new PreparedStatementWrapper(
                 "SELECT id FROM groups WHERE name = ?;",
-                args
+                groupName
         );
 
         statement = psw.createPreparedStatement(conn);
@@ -137,6 +174,7 @@ public class DatabaseUtils {
 
     public static boolean AddExpenseToGroup(String groupName, Expense expense, Connection conn) throws Exception {
         resetAttributes();
+
         ArrayList<Object> args = new ArrayList<>();
 
         args.add(expense.getDescription());

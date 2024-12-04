@@ -2,6 +2,7 @@ package pt.isec.pd.Server.Data;
 
 import org.springframework.security.core.parameters.P;
 import pt.isec.pd.Shared.Entities.*;
+import pt.isec.pd.Shared.Hasher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,6 @@ public class DatabaseUtils {
         statement = null;
     }
 
-    // TODO fazer...
     public static boolean registar(User user, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
@@ -46,18 +46,22 @@ public class DatabaseUtils {
 
         updateCount = statement.getUpdateCount();
 
-        return updateCount == 1;
+        return updateCount != -1;
     }
 
-    public static boolean login(String username, String password, Connection conn) throws Exception {
+    public static boolean login(String email, String password, Connection conn) throws Exception {
         resetAttributes();
         ArrayList<Object> args = new ArrayList<>();
-        args.add(username);
+
+        args.add(email);
         args.add(password);
+
         psw = new PreparedStatementWrapper(
                 "SELECT * FROM users WHERE email = ? AND password = ?;",
                 args
         );
+
+        System.out.println(psw.toString());
 
         statement = psw.createPreparedStatement(conn);
         resultSet = statement.executeQuery();
@@ -67,9 +71,9 @@ public class DatabaseUtils {
 
     public static List<ListedUser> GetUserList(Connection conn) throws Exception {
         resetAttributes();
+
         psw = new PreparedStatementWrapper(
-                "SELECT * FROM users",
-                List.of()
+                "SELECT * FROM users"
         );
 
         ArrayList<ListedUser> users = new ArrayList<>();
@@ -87,15 +91,30 @@ public class DatabaseUtils {
                     ""
             ));
         }
+
         return users;
     }
 
-    public static List<ListedGroup> GetGroupList(Connection conn) throws Exception {
+    public static List<ListedGroup> GetUserGroupList(String email, Connection conn) throws Exception {
         resetAttributes();
+
         psw = new PreparedStatementWrapper(
-                "SELECT * FROM groups",
-                List.of()
+                "SELECT" +
+                        "    g.id AS group_id," +
+                        "    g.name AS group_name," +
+                        "    g.creation_date AS group_creation_date," +
+                        "    u.email AS user_email" +
+                        "FROM" +
+                        "    groups g" +
+                        "JOIN" +
+                        "    group_members gm ON g.id = gm.group_id" +
+                        "JOIN" +
+                        "    users u ON gm.user_id = u.id" +
+                        "WHERE" +
+                        "    u.email = 'user@example.com';",
+                email
         );
+
         ArrayList<ListedGroup> groups = new ArrayList<>();
 
         statement = psw.createPreparedStatement(conn);
@@ -109,6 +128,32 @@ public class DatabaseUtils {
                     resultSet.getInt("owner_id")
             ));
         }
+
+        return groups;
+
+    }
+
+    public static List<ListedGroup> GetGroupList(Connection conn) throws Exception {
+        resetAttributes();
+
+        psw = new PreparedStatementWrapper(
+                "SELECT * FROM groups"
+        );
+
+        ArrayList<ListedGroup> groups = new ArrayList<>();
+
+        statement = psw.createPreparedStatement(conn);
+        resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            groups.add(new ListedGroup(
+                    resultSet.getInt("id"),
+                    resultSet.getDate("creation_date"),
+                    resultSet.getString("name"),
+                    resultSet.getInt("owner_id")
+            ));
+        }
+
         return groups;
 
     }
@@ -155,11 +200,10 @@ public class DatabaseUtils {
 
     public static Integer GetGroupId(String groupName, Connection conn) throws Exception {
         resetAttributes();
-        ArrayList<Object> args = new ArrayList<>();
-        args.add(groupName);
+
         psw = new PreparedStatementWrapper(
                 "SELECT id FROM groups WHERE name = ?;",
-                args
+                groupName
         );
 
         statement = psw.createPreparedStatement(conn);
@@ -169,15 +213,31 @@ public class DatabaseUtils {
         return resultSet.getInt("id");
     }
 
-    //TODO
-    public static boolean AddExpenseToGroup(String email,String groupName, Expense expense, Connection conn) throws Exception {
+    public static boolean AddExpenseToGroup(String groupName, Expense expense, Connection conn) throws Exception {
         resetAttributes();
+
+        ArrayList<Object> args = new ArrayList<>();
+
+        args.add(expense.getDescription());
+        args.add(expense.getValue());
+        args.add(expense.getPaid_by());
+        args.add(DatabaseUtils.GetGroupId(groupName, conn));
+
         psw = new PreparedStatementWrapper(
-                "INSERT INTO expenses"
+                "INSERT INTO expenses (description, value, paid_by, group_id) " +
+                        "VALUES (?, ?, ?, ?);",
+                args
         );
-        return true;
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        updateCount = statement.getUpdateCount();
+
+        return updateCount != 1;
     }
 
+    public static boolean DeleteExpenseFromGroup(Integer expenseId, Connection conn) throws Exception {
     //TODO nas funcoes a usar diretamente em endpoint nao por a dar throw para ficar mais limpinho
     public static boolean DeleteExpenseFromGroup(String groupName, Integer expenseId, Connection conn) {
         resetAttributes();
@@ -221,7 +281,21 @@ public class DatabaseUtils {
         resultSet = statement.executeQuery();
         if(!resultSet.next()) throw new Exception("user email not found");
         return resultSet.getInt("id");
+
+        psw = new PreparedStatementWrapper(
+                "DELETE FROM expenses " +
+                        "WHERE id = ?;",
+                expenseId
+        );
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        updateCount = statement.getUpdateCount();
+
+        return updateCount != -1;
     }
+
 
     public static List<ListedExpense> GetExpenseListFromGroup(String groupName, Connection conn) throws Exception {
         resetAttributes();

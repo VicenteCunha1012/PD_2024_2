@@ -30,7 +30,6 @@ public class Hasher {
 
     public static User HashUserPass(User user) {
         return new User(
-                user.getCreation_Date(),
                 user.getName(),
                 user.getContact(),
                 user.getEmail(),

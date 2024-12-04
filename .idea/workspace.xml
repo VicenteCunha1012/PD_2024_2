@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a0501e87-52c2-4ef4-8bf5-cc388d11bec5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/security/UserAuthenticationProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/security/UserAuthenticationProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/IO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/IO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/scripts/CreateScript.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/scripts/CreateScript.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Enum" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/AuthController.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/AccessLevel.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedGroup.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/User.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/IO.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2phtb3WD9ROvmglJxigaiypKkGg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MainClient.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.MainServer.executor": "Run",
+    "git-widget-placeholder": "jon",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/joaoa/Desktop/Escola/Projetos/ProjectPD - Java/Meta_1/Code",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="pt.isec.pd.Client.Logic" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.MainClient">
+    <configuration name="MainClient" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="pt.isec.pd.MainClient" />
+      <module name="PD-2-testes" />
+      <option name="PROGRAM_PARAMETERS" value="localhost 8080" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MainServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="PD-2-testes" />
+      <option name="PROGRAM_PARAMETERS" value="src/main/resources/database/database.sqlite" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="pt.isec.pd.MainServer" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.MainClient" />
+      <item itemvalue="Spring Boot.MainServer" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a0501e87-52c2-4ef4-8bf5-cc388d11bec5" name="Changes" comment="" />
+      <created>1733230202392</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733230202392</updated>
+      <workItem from="1733230203495" duration="63000" />
+      <workItem from="1733234156899" duration="1785000" />
+      <workItem from="1733251979745" duration="14835000" />
+      <workItem from="1733325862848" duration="8592000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

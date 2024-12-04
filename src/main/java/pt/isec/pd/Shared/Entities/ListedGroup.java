@@ -9,6 +9,8 @@ public class ListedGroup implements Serializable {
     private String name;
     private int owner_id;
 
+    public ListedGroup() {}
+
     public ListedGroup(Integer id, Date creation_date, String name, Integer owner_id) {
         this.id = id;
         this.creation_date = creation_date;

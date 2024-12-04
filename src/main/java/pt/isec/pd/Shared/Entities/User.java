@@ -1,15 +1,12 @@
 package pt.isec.pd.Shared.Entities;
 
-import java.sql.Date;
-
 public class User {
-    private int id;
     private String name;
     private String contact;
     private String email;
     private String password;
 
-    public User(String nome, String contacto, String email, String password) {
+    public User(String name, String contact, String email, String password) {
         this.name = name;
         this.contact = contact;
         this.email = email;
@@ -28,8 +25,16 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassword() { return password; }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", contact='" + contact + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 
 }

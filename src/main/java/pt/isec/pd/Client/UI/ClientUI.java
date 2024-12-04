@@ -1,6 +1,9 @@
 package pt.isec.pd.Client.UI;
 
-import pt.isec.pd.Shared.Hasher;
+import ch.qos.logback.core.net.server.Client;
+import pt.isec.pd.Client.Logic.ClientManager;
+import pt.isec.pd.Client.Logic.Requests.AuthRequests;
+import pt.isec.pd.Shared.Entities.User;
 import pt.isec.pd.Shared.IO;
 
 import java.io.IOException;
@@ -12,8 +15,11 @@ import java.util.ArrayList;
 public class ClientUI {
     public static boolean isRunning = true;
     private String message = "";
+    private ClientManager clientManager;
 
-    public ClientUI() {}
+    public ClientUI(ClientManager clientManager) {
+        this.clientManager = clientManager;
+    }
 
     /**
      * Começar loop da UI
@@ -34,7 +40,21 @@ public class ClientUI {
                     this.message = "";
                     System.out.println("--------------------------");
                 }
-
+                switch(clientManager.getAccessLevel()) {
+                    case EXIT:
+                        isRunning = false;
+                        break;
+                    case BEFORE_LOGIN:
+                        this.startingMenu();
+                        break;
+                    case BEFORE_GROUP_SELECT:
+                        this.groupSelectMenu();
+                        break;
+                    case IN_GROUP_CONTEXT:
+                        this.groupActionsMenu();
+                        break;
+                    default:
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -46,31 +66,46 @@ public class ClientUI {
      * @throws IOException
      */
     private void startingMenu() throws IOException {
-        String fullName;
+        String userName;
         String email;
-        String phoneNumber;
+        String contacto;
         String password;
+
 
         switch (IO.chooseOption("+--------------------------- Menu Principal ---------------------------+ ", "",
                 "Registar", "Iniciar sessão", "Sair"
         )) {
 
             case 1:
-                fullName = IO.readString("  Nome completo > ", false);
+                userName = IO.readString("  Nome de Utilizador > ", false);
 
                 email = IO.readString("  Email > ", false);
 
-                phoneNumber = IO.readString("  Telefone > ", false);
+                contacto = IO.readString("  Telefone > ", false);
 
-                password = Hasher.HashString(IO.readString("  Palavra-passe > ", false));
+                password = IO.readString("  Palavra-passe > ", false);
+
+                if (!AuthRequests.register(new User(userName, contacto, email, password), clientManager.getUrl())) {
+                    System.err.println("   Falha ao efetuar registo!");
+                } else {
+                    System.out.println("   Registado com successo!!");
+                }
 
                 break;
+
             case 2:
+                userName = IO.readString("  Nome de Utilizador > ", false);
 
-                email = IO.readString("  Email > ", false);
+                password = IO.readString("  Palavra-passe > ", false);
 
-                password = Hasher.HashString(IO.readString("  Palavra-passe > ", false));
+                String tempToken = AuthRequests.login(userName, password, clientManager.getUrl());
 
+                if (tempToken == null) {
+                    System.err.println("  Nome de Utilizador ou Palavra-Passe incorreto!");
+                } else {
+                    clientManager.setToken(tempToken);
+                    System.out.println("  O seu token é: " + clientManager.getToken());
+                }
 
                 break;
             case 3:
@@ -89,7 +124,7 @@ public class ClientUI {
      * Menu da UI para quando o access level é BEFORE_GROUP_SELECT
      * @throws Exception
      */
-    private void SecondMenu() throws Exception {
+    private void groupSelectMenu() throws Exception {
         String fullName;
         String phoneNumber;
         String password;
@@ -99,7 +134,7 @@ public class ClientUI {
 
         this.ShowUserInfoMenu();
 
-        switch (IO.chooseOption(" +-------------------------------- Menu --------------------------------+ ", "",
+        switch (IO.chooseOption(" +-------------------------------- Escolha de Grupo --------------------------------+ ", "",
                 "Editar perfil", "Selecionar grupo", "Criar grupo", "Os meus convites", "Os meus grupos", "Terminar Sessão"
         )) {
             /*
@@ -109,9 +144,12 @@ public class ClientUI {
              */
             case 1:
                 System.out.println("Se não quiser mudar os valores, repita-os");
+
                 fullName = IO.readString("  Nome completo > ", false);
+
                 phoneNumber = IO.readString("  Telefone > ", true);
-                password = Hasher.HashString(IO.readString("  Palavra-passe > ", false));
+
+                password = IO.readString("  Palavra-passe > ", false);
 
                 break;
 
@@ -164,9 +202,9 @@ public class ClientUI {
                  */
             case 5:
 
-                    System.out.println(" +------------------------------- Grupos -------------------------------+");
+                System.out.println(" +------------------------------- Grupos -------------------------------+");
 
-                    System.out.println(" +----------------------------------------------------------------------+");
+                System.out.println(" +----------------------------------------------------------------------+");
 
                 break;
 

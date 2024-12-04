@@ -1,6 +1,5 @@
 package pt.isec.pd.Server.Springboot.security;
 
-
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +36,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider
             loginResult = false;
         }
 
-        if(loginResult) {
+        if (loginResult) {
             return new UsernamePasswordAuthenticationToken(username, password, List.of());
         }
         System.out.println("nao logged in");

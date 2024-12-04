@@ -1,7 +1,7 @@
 package pt.isec.pd.Server.Data;
 
-import org.springframework.security.core.parameters.P;
 import pt.isec.pd.Shared.Entities.*;
+import pt.isec.pd.Shared.Hasher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,9 +55,11 @@ public class DatabaseUtils {
         args.add(password);
 
         psw = new PreparedStatementWrapper(
-                "SELECT * FROM users WHERE email = ? AND password = ?;",
+                "SELECT * FROM users WHERE name = ? AND password = ?;",
                 args
         );
+
+        System.out.println(psw.toString());
 
         statement = psw.createPreparedStatement(conn);
         resultSet = statement.executeQuery();
@@ -67,6 +69,7 @@ public class DatabaseUtils {
 
     public static List<ListedUser> GetUserList(Connection conn) throws Exception {
         resetAttributes();
+
         psw = new PreparedStatementWrapper(
                 "SELECT * FROM users"
         );

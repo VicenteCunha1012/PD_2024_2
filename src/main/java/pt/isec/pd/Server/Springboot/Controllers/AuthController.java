@@ -30,6 +30,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody User user) {
         boolean result;
+
         try {
             result = DatabaseUtils.registar(
                     Hasher.HashUserPass(user),
@@ -39,13 +40,13 @@ public class AuthController {
             result = false;
         }
 
-        if(result) {
+        if (result) {
             return new ResponseEntity(HttpStatus.OK);
         }
+
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-
 
     @PostMapping("/login")
     public ResponseEntity login(Authentication authentication) {

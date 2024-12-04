@@ -25,7 +25,7 @@ public class GroupController {
     }
 
     @PostMapping("{group}/expenses")
-    public ResponseEntity addGroupExpenses(
+    public ResponseEntity addGroupExpense(
             @PathVariable("group") String group,
             @RequestBody Expense expense) {
         boolean result;
@@ -54,7 +54,7 @@ public class GroupController {
     }
 
     @DeleteMapping("{group}/{expense_id}")
-    public ResponseEntity deleteGroupExpenses(
+    public ResponseEntity deleteGroupExpense(
             @PathVariable("group") String group,
             @PathVariable("expense_id") Integer expense_id
     ) {

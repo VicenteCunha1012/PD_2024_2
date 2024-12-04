@@ -7,6 +7,7 @@ import pt.isec.pd.Client.Logic.Requests.AuthRequests;
 import pt.isec.pd.Client.Logic.Requests.GroupRequests;
 import pt.isec.pd.Shared.AccessLevel;
 import pt.isec.pd.Shared.Entities.Group;
+import pt.isec.pd.Shared.Entities.ListedExpense;
 import pt.isec.pd.Shared.Entities.ListedGroup;
 import pt.isec.pd.Shared.Entities.User;
 import pt.isec.pd.Shared.IO;
@@ -14,6 +15,7 @@ import pt.isec.pd.Shared.IO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface de utilizador do cliente
@@ -156,7 +158,7 @@ public class ClientUI {
         }
 
         while (option < 0 || option > groupsList.size() - 1) {
-            option = IO.readInt("  > ");
+            option = IO.readInt("\n  Escolha o seu grupo > ");
         }
 
         clientManager.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
@@ -171,42 +173,78 @@ public class ClientUI {
     private void groupActionsMenu() throws Exception {
         int option;
 
-        String invitee;
-        String expenseDescription;
-        double value;
-        ArrayList<Integer> groupMembersId;
-
         String novoNome;
 
         while (true) {
             switch (IO.chooseOption("+----------------------- Grupo " + clientManager.getTargetGroupName() + " ------------------------+ ",
-                    "", "Alterar nome do grupo", "Convidar", "Adicionar Despesa", "Editar despesa",
-                    "Eliminar despesa", "Pagar despesa", "Listar histórico de despesas", "Listar Pagamentos",
-                    "Eliminar Pagamento", "Exportar Despesas para ficheiro CSV", "Ver total de gastos do grupo",
-                    "Ver saldo e informações", "Eliminar Grupo", "Sair do Grupo", "Voltar"
+                    "",  "Adicionar Despesa", "Listar Despesas", "Eliminar despesa", "Voltar"
             )) {
-
-                /*
-                CASE ALTERAR NOME
-                 */
+                    /*
+                    CASE ADICIONAR DESPESA
+                    */
                 case 1:
-                    novoNome = IO.readString("   Novo nome > ", false);
+                    String expenseDescription;
+                    double value;
+                    ArrayList<Integer> groupMembersId;
 
-                    break;
-                /*
-                CASE CONVIDAR
-                 */
-                case 2:
-                    invitee = IO.readString("   E-mail do convidado > ", true);
+                    expenseDescription = IO.readString("  Descrição da despesa > ", false);
+                    do {
+                        value = IO.readNumber("  Valor da despesa > ");
+                    } while (value <= 0);
 
+                    System.out.println("   Com quem partilhar a despesa?");
+
+                    System.out.println("   \t0. Terminar\n  \t-1. Cancelar\n");
+
+
+                    switch (
+                            IO.chooseOption("Também vais pagar uma parte da despesa?", "", "Sim", "Não")
+                    ) {
+
+                    }
+
+
+                    if (GroupRequests.addGroupExpense(clientManager.getTargetGroupName(),)) {
+                        this.message = "Despesa inserida com sucesso.";
+                    } else {
+                        this.message = "Ocorreu um erro a inserir esta despesa.";
+                    }
 
                     break;
 
                     /*
-                    CASE ADICIONAR DESPESA
-                     */
+                    CASE LISTAR DESPESAS
+                    */
+                case 2:
+                    List<ListedExpense> list = GroupRequests.listGroupExpenses(
+                            clientManager.getTargetGroupName(),
+                            clientManager.getUrl()
+                    );
+
+                    System.out.println("\n  + Despesas ------------------------------+");
+                    for (ListedExpense l : list) {
+                        System.out.println(l.toString());
+                    }
+                    System.out.println("\n  +----------------------------------------+");
+
+                    System.out.println("Prima ENTER para continuar");
+                    System.in.read();
+
+                    break;
+
+                    /*
+                    CASE ELIMINAR DESPESA
+                    */
                 case 3:
 
+                    break;
+
+                    /*
+                    CASE VOLTAR
+                    */
+                case 4:
+                    clientManager.setAccessLevel(AccessLevel.BEFORE_GROUP_SELECT);
+                    return;
             }
         }
     }

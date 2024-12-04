@@ -95,6 +95,19 @@ public class DatabaseUtils {
         return users;
     }
 
+    public static List<ListedUser> GetGroupMembers(String groupName, Connection conn) throws Exception {
+        resetAttributes();
+        List<ListedUser> users = GetUserList(conn);
+        ArrayList<ListedUser> groupMembers = new ArrayList<>();
+        for(ListedUser user : users) {
+            if(DatabaseUtils.IsUserInGroup(user.getEmail(), groupName, conn)) {
+                groupMembers.add(user);
+            }
+        }
+        return groupMembers;
+
+    }
+
     public static List<ListedGroup> GetUserGroupList(String email, Connection conn) throws Exception {
         resetAttributes();
 

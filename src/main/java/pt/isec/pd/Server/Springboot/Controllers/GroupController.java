@@ -34,6 +34,30 @@ public class GroupController {
         }
     }
 
+    //ver membros do grupo
+    @GetMapping("{group}")
+    public ResponseEntity seeGroupMembers(
+            @PathVariable("group") String group
+    ) {
+        if(!DatabaseUtils.GroupExists(group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        String userEmail = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject();
+        if(!DatabaseUtils.IsUserInGroup(userEmail, group, Database.database.getConn())) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+
+        try {
+            return new ResponseEntity(
+                    DatabaseUtils.GetGroupMembers(group, Database.database.getConn()),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //criar despesa no grupo
     @PostMapping("{group}/expenses")
     public ResponseEntity addExpenseToGroup(

@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76632e96-2a90-4769-9481-3fd73b0fc04a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/Expense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/Expense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedExpense.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +37,15 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/PreparedStatementWrapper.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/Expense.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedExpense.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -43,6 +58,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.MainClient.executor": "Debug",
     "Application.MainObservableClient.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -51,7 +67,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.MainServer.executor": "Run",
-    "git-widget-placeholder": "vicente",
+    "git-widget-placeholder": "jon",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/joaoa/Desktop/Escola/Projetos/ProjectPD - Java/Meta_1/Code",
     "node.js.detected.package.eslint": "true",
@@ -61,10 +77,10 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Spring Boot.MainServer">
+  <component name="RunManager" selected="Application.MainClient">
     <configuration name="MainClient" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="pt.isec.pd.MainClient" />
-      <module name="PD_2024_2" />
+      <module name="PD-2-testes" />
       <option name="PROGRAM_PARAMETERS" value="localhost 8080" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -80,7 +96,7 @@
     </configuration>
     <configuration name="MainServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="PD_2024_2" />
+      <module name="PD-2-testes" />
       <option name="PROGRAM_PARAMETERS" value="src/main/resources/database/database.sqlite" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="pt.isec.pd.MainServer" />
       <method v="2">
@@ -117,5 +133,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java</url>
+          <line>82</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

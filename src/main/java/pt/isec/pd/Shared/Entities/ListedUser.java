@@ -11,6 +11,8 @@ public class ListedUser implements Serializable {
     private String email;
     private String password;
 
+    public ListedUser() {}
+
     public ListedUser(Integer id, Date creation_Date, String name, String contact, String email, String password) {
         this.id = id;
         this.creation_Date = creation_Date;
@@ -44,6 +46,6 @@ public class ListedUser implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("ID: %d, Nome: %s, Contacto: %s, Email: %s",id, name, contact, email);
+        return String.format("Nome: %s \t\t Contacto: %s\t\t Email: %s", name, contact, email);
     }
 }

@@ -50,20 +50,18 @@ public class MainObservableClient {
 
         String input;
 
-
-        while (keepRunning) {
+        boolean keepRunningInput = true;
+        while (keepRunning && keepRunningInput) {
             input = IO.readString("Comando > ", false);
             try {
-                keepRunning = InputHandler.HandleInput(input, remoteAppInfoImpl);
+                keepRunningInput = InputHandler.HandleInput(input, remoteAppInfoImpl);
             } catch (Exception e) {
                 System.out.println("Ocorreu um erro a tentar correr uma função remota, verifique se o servidor está online ou tente reiniciar a aplicação.");
             }
         }
         try {
             remoteNotiServerImpl.removeObserver(notiClient);
-        } catch (RemoteException e) {
-            System.out.println("Não foi possível desligar graciosamente.");
-        }
+        } catch (RemoteException e) {}
 
     }
 }

@@ -13,7 +13,8 @@ public class NotificationClientImpl extends UnicastRemoteObject implements Notif
         if(message.equals("EXIT")) {
             System.out.println("A fechar o cliente.");
             MainObservableClient.keepRunning = false;
-            return;
+            UnicastRemoteObject.unexportObject(this, true);
+            System.exit(0);
         }
         System.out.println("\n" + message);
         System.out.print("Comando > ");

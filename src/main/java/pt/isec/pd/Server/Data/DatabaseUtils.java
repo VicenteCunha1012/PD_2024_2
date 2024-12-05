@@ -61,7 +61,6 @@ public class DatabaseUtils {
                 args
         );
 
-        System.out.println(psw.toString());
 
         statement = psw.createPreparedStatement(conn);
         resultSet = statement.executeQuery();

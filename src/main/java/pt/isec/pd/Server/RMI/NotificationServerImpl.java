@@ -17,6 +17,12 @@ public class NotificationServerImpl extends UnicastRemoteObject implements Notif
         this.clients.add(notificationClient);
     }
 
+    @Override
+    public void removeObserver(NotificationClient notificationClient) throws RemoteException {
+        notificationClient.update("EXIT");
+        this.clients.remove(notificationClient);
+    }
+
     //later fazer o remove
 
     @Override
@@ -24,7 +30,10 @@ public class NotificationServerImpl extends UnicastRemoteObject implements Notif
         for (NotificationClient notificationClient : clients) {
             try {
                 notificationClient.update(message);
-            } catch (RemoteException e) {}
+            } catch (RemoteException e) {
+                System.out.println("Ocorreu um erro a ");
+                this.removeObserver(notificationClient);
+            }
         }
     }
 }

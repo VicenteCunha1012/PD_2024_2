@@ -16,16 +16,25 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import pt.isec.pd.ObservableClient.RMIHelper.NotificationClient;
 import pt.isec.pd.Server.Data.Database;
+import pt.isec.pd.Server.Data.PreparedStatementWrapper;
 import pt.isec.pd.Server.Helper.Helper;
 import pt.isec.pd.Server.RMI.GetAppInfoImpl;
+import pt.isec.pd.Server.RMI.NotificationServer;
 import pt.isec.pd.Server.RMI.NotificationServerImpl;
 import pt.isec.pd.Server.RMI.ServiceRegisterer;
 import pt.isec.pd.Server.Springboot.security.RsaKeysProperties;
+import pt.isec.pd.Shared.IO;
 
 import java.io.File;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.Instant;
+
+import static pt.isec.pd.Server.Helper.Helper.sbAppContext;
 
 @SpringBootApplication
 @EnableConfigurationProperties(RsaKeysProperties.class)
@@ -80,7 +89,7 @@ public class MainServer {
 
     public static void main(String[] args) {
         String APP_INFO_URI = "rmi://localhost:1099/get_app_info";
-        String NOTIFICATION_SERVER = "rmi://localhost:1100/update_server";
+        String NOTIFICATION_SERVER = "rmi://localhost:1099/update_server";
 
         if (args.length != 1) {
             System.out.println("Sintaxe java Servidor DBPath");
@@ -106,7 +115,7 @@ public class MainServer {
             return;
         }
 
-        Helper.sbAppContext =  SpringApplication.run(MainServer.class, args);
+        sbAppContext =  SpringApplication.run(MainServer.class, args);
 
         if(!ServiceRegisterer.CreateRegistry(1099) || !ServiceRegisterer.CreateRegistry(1100)) {
             System.out.println("Não foi possível exportar o registo, já deve ter sido criado.");
@@ -146,6 +155,34 @@ public class MainServer {
                 return;
             }
         }
+
+        boolean keepRunning = true;
+        while(keepRunning) {
+            if(IO.readString("""
+                    *****************************************
+                    *Introduza "sair" para fechar o servidor*
+                    *****************************************
+                    """, true).equals("sair")) {
+                PreparedStatementWrapper.CloseAllPendingStatements();
+                if(sbAppContext != null) {
+                    SpringApplication.exit(sbAppContext);
+                }
+                try {
+                    NotificationServerImpl.instance.notifyObservers("EXIT");
+                    UnicastRemoteObject.unexportObject(appInfoImpl, true); // Libera o objeto e termina as threads
+                    UnicastRemoteObject.unexportObject(NotificationServerImpl.instance, true);
+                    for(Registry registry : ServiceRegisterer.openRegistries) {
+                        UnicastRemoteObject.unexportObject(registry, true); // Libera o registro RMI, se necessário
+                    }
+                } catch (NoSuchObjectException e) {} catch (RemoteException e) {
+
+                }
+
+                System.exit(0);
+            }
+        }
+
+
 
 
 

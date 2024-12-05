@@ -9,10 +9,12 @@ public class Helper {
     public static ApplicationContext sbAppContext;
     public static void shutDown() {
         PreparedStatementWrapper.CloseAllPendingStatements();
+        System.out.println("done");
         if(sbAppContext != null) {
             SpringApplication.exit(sbAppContext);
         }
-        System.exit(1);
+        System.out.println("done");
+        System.exit(0);
     }
 
     public static String BuildNotificationMessage(UpdatableType type, String username) {

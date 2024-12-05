@@ -19,6 +19,7 @@ public class MainObservableClient {
     //ligar ao servico
     //ver se da pra fazer so com um thread
     //se nao é a vida
+    public static boolean keepRunning = true;
     public static void main(String[] args) {
         if(args.length != 2) {
             System.out.println("Sintaxe java MainObservableClient get_app_info_rmi_uri update_server_rmi");
@@ -48,8 +49,6 @@ public class MainObservableClient {
         }
 
         String input;
-        boolean keepRunning = true;
-
 
 
         while (keepRunning) {
@@ -57,8 +56,13 @@ public class MainObservableClient {
             try {
                 keepRunning = InputHandler.HandleInput(input, remoteAppInfoImpl);
             } catch (Exception e) {
-                System.out.println("Ocorreu um erro a tentar correr uma função remota: "+ e.getMessage());
+                System.out.println("Ocorreu um erro a tentar correr uma função remota, verifique se o servidor está online ou tente reiniciar a aplicação.");
             }
+        }
+        try {
+            remoteNotiServerImpl.removeObserver(notiClient);
+        } catch (RemoteException e) {
+            System.out.println("Não foi possível desligar graciosamente.");
         }
 
     }

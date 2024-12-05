@@ -6,11 +6,14 @@ import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
 
 public class ServiceRegisterer {
+    public static ArrayList<Registry> openRegistries = new ArrayList<>();
     public static boolean CreateRegistry(int port) {
         try {
-            LocateRegistry.createRegistry(port);
+            openRegistries.add(LocateRegistry.createRegistry(port));
             return true;
         } catch (RemoteException e) {
             return false;

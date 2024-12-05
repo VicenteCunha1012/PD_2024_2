@@ -7,6 +7,7 @@ public class ClientManager {
     private String token;
     private String email;
     private String targetGroupName;
+    private int targetGroupId;
     private AccessLevel accessLevel;
 
     public ClientManager(String ip, int port) {
@@ -18,6 +19,7 @@ public class ClientManager {
         return url;
     }
 
+
     public String getToken() {
         return token;
     }
@@ -25,6 +27,7 @@ public class ClientManager {
     public void setToken(String token) {
         this.token = token;
     }
+
 
     public String getEmail() {
         return email;
@@ -34,12 +37,21 @@ public class ClientManager {
         this.email = email;
     }
 
+
     public String getTargetGroupName() {
         return targetGroupName;
     }
 
     public void setTargetGroupName(String targetGroupName) {
         this.targetGroupName = targetGroupName;
+    }
+
+    public int getTargetGroupId() {
+        return targetGroupId;
+    }
+
+    public void setTargetGroupId(int targetGroupId) {
+        this.targetGroupId = targetGroupId;
     }
 
     public AccessLevel getAccessLevel() {

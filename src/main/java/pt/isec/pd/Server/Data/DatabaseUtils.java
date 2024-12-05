@@ -94,43 +94,18 @@ public class DatabaseUtils {
         return users;
     }
 
-    public static List<ListedUser> GetGroupMembers(String groupName, Connection conn) throws Exception {
-        resetAttributes();
-        List<ListedUser> users = GetUserList(conn);
-        ArrayList<ListedUser> groupMembers = new ArrayList<>();
-        for(ListedUser user : users) {
-            if(DatabaseUtils.IsUserInGroup(user.getEmail(), groupName, conn)) {
-                groupMembers.add(user);
-            }
-        }
-        return groupMembers;
 
-    }
 
     public static List<ListedGroup> GetUserGroupList(String email, Connection conn) throws Exception {
         resetAttributes();
 
         psw = new PreparedStatementWrapper(
                 """
-                     SELECT g.id group_id, g.name group_name, g.creation_date group_creation_date, u.email user_email
-                     FROM groups g 
-                     JOIN group_members gm ON g.id = gm.group_id 
-                     JOIN users u ON gm.user_id = u.id 
-                     WHERE u.email = ?;  
+                        SELECT * FROM groups g 
+                        JOIN group_members gm ON g.id = gm.group_id 
+                        JOIN users u ON gm.user_id = u.id 
+                        WHERE u.email = ?;
                         """,
-//                "SELECT" +
-//                        "    g.id AS group_id," +
-//                        "    g.name AS group_name," +
-//                        "    g.creation_date AS group_creation_date," +
-//                        "    u.email AS user_email" +
-//                        "FROM" +
-//                        "    groups g" +
-//                        "JOIN" +
-//                        "    group_members gm ON g.id = gm.group_id" +
-//                        "JOIN" +
-//                        "    users u ON gm.user_id = u.id" +
-//                        "WHERE" +
-//                        "    u.email = 'user@example.com';",
                 email
         );
 
@@ -149,6 +124,19 @@ public class DatabaseUtils {
         }
 
         return groups;
+
+    }
+
+    public static List<ListedUser> GetGroupMembers(String groupName, Connection conn) throws Exception {
+        resetAttributes();
+        List<ListedUser> users = GetUserList(conn);
+        ArrayList<ListedUser> groupMembers = new ArrayList<>();
+        for(ListedUser user : users) {
+            if(DatabaseUtils.IsUserInGroup(user.getEmail(), groupName, conn)) {
+                groupMembers.add(user);
+            }
+        }
+        return groupMembers;
 
     }
 
@@ -235,7 +223,7 @@ public class DatabaseUtils {
     public static boolean AddExpenseToGroup(String groupName, Expense expense, Connection conn) throws Exception {
         resetAttributes();
 
-        ArrayList<Object> args = new ArrayList<>();
+        List<Object> args = new ArrayList<>();
 
         args.add(expense.getDescription());
         args.add(expense.getValue());
@@ -253,8 +241,100 @@ public class DatabaseUtils {
 
         updateCount = statement.getUpdateCount();
 
-        return updateCount != 1;
+        if (updateCount == -1) { return false; }
+
+        return divideExpense(
+                expense.getPaid_by(),
+                expense.getDebtors(),
+                DatabaseUtils.getLastRowExpenseId(conn),
+                DatabaseUtils.GetGroupId(groupName, conn),
+                conn
+        );
     }
+
+    public static boolean divideExpense(int my_id, List<Integer> userId_list, int expenseId, int groupId, Connection conn) throws Exception {
+        resetAttributes();
+
+        double totalValue = getExpenseValue(expenseId, conn);
+        double shareValue = totalValue/userId_list.size();
+
+        System.out.println(userId_list);
+
+        List<Object> args = args = new ArrayList<>();
+
+        for (Integer id : userId_list) {
+
+            if (id == my_id) { continue; }
+
+            args.clear();
+
+            args.add(expenseId);
+            args.add(id);
+            args.add(shareValue);
+            args.add(false);
+            args.add(groupId);
+
+            psw = new PreparedStatementWrapper(
+                    "INSERT INTO expense_shares (expense_id, user_id, share, paid, group_id)" +
+                            " VALUES (?, ?, ?, ?, ?)",
+                    args
+            );
+
+            System.out.println(psw.toString());
+
+            statement = psw.createPreparedStatement(conn);
+            statement.execute();
+
+            updateCount = statement.getUpdateCount();
+
+            if (updateCount != 1) { return true; }
+
+        }
+
+        return true;
+    }
+
+    public static Integer getLastRowExpenseId(Connection conn) throws Exception {
+        resetAttributes();
+        List<Object> args = new ArrayList<>();
+        Integer id;
+
+        psw = new PreparedStatementWrapper(
+                "SELECT id FROM expenses ORDER BY id DESC LIMIT 1"
+        );
+
+        System.out.println(psw.toString());
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        resultSet = statement.getResultSet();
+
+
+        if (resultSet == null) {
+            throw new Exception("Esta tabela está vazia!");
+        } else {
+            return resultSet.getInt("id");
+        }
+
+    }
+
+    private static double getExpenseValue(int expenseId, Connection conn) throws Exception {
+        resetAttributes();
+        psw = new PreparedStatementWrapper(
+                "SELECT value FROM expenses WHERE id = ?;",
+                (Integer) expenseId
+        );
+
+        statement = psw.createPreparedStatement(conn);
+        statement.execute();
+
+        resultSet = statement.getResultSet();
+
+        return resultSet.getDouble("value");
+
+    }
+
     //TODO nas funcoes a usar diretamente em endpoint nao por a dar throw para ficar mais limpinho
     public static boolean DeleteExpenseFromGroup(Integer expenseId, Connection conn) throws Exception {
         resetAttributes();
@@ -326,9 +406,10 @@ public class DatabaseUtils {
                     resultSet.getBoolean("paid"),
                     resultSet.getInt("paid_by"),
                     resultSet.getInt("group_id")
-            ));;
+
+            ));
         }
         return expenses;
     }
 
-  }
+}

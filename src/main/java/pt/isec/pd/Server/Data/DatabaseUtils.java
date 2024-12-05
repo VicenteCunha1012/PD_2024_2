@@ -288,7 +288,7 @@ public class DatabaseUtils {
 
             updateCount = statement.getUpdateCount();
 
-            if (updateCount != 1) { return false; }
+            if (updateCount != 1) { return true; }
 
         }
 

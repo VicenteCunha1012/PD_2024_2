@@ -53,9 +53,9 @@ public class ListedExpense implements Serializable {
     }
 
     public String toString() {
-        return  "    Id: " + this.id + '\n' +
-                "    Descrição: " + this.description + '\n' +
-                "    Criada a " + this.creation_date.toString() + '\n' +
-                "    Valor: " + this.value + '\n';
+        return  '\n' +
+                "\tDescrição: " + this.description + '\n' +
+                "\tCriada a " + this.creation_date.toString() + '\n' +
+                "\tValor: " + this.value + '\n';
     }
 }

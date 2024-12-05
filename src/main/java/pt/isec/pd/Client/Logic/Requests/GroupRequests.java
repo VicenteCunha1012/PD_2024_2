@@ -141,6 +141,7 @@ public class GroupRequests {
             responseCode = conn.getResponseCode();
 
             System.out.println("ReponseCode: " + responseCode);
+
             if (conn != null) { conn.disconnect(); }
 
             return responseCode == HttpURLConnection.HTTP_OK;
@@ -198,7 +199,7 @@ public class GroupRequests {
         return expenses;
     }
 
-    public static boolean deleteGroupExpense(String groupName, int expense_id, String url) {
+    public static boolean deleteGroupExpense(String groupName, int expense_id, String url, String token) {
         URL requestUrl;
         HttpURLConnection conn;
         int responseCode;
@@ -212,11 +213,20 @@ public class GroupRequests {
                 throw new Exception("Falha ao conectar ao Servidor!", e);
             }
 
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+
+            conn.connect();
+
+            responseCode = conn.getResponseCode();
+
+            if (conn != null) { conn.disconnect(); }
+
+            return responseCode == HttpURLConnection.HTTP_OK;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        return false;
     }
 
 }

@@ -153,16 +153,22 @@ public class ClientUI {
         System.out.println("\n +--------------------------- Os meus Grupos ---------------------------+ ");
 
         for (int i = 0; i < groupsList.size(); ++i) {
-            System.out.println( "  " + (i+1) + ". " + groupsList.get(i).getName());
+            System.out.println("  " + (i+1) + " - " + groupsList.get(i).getName());
         }
+        System.out.println("  0 - Voltar");
 
-        while (option < 0 || option > groupsList.size() - 1) {
+        while ((option) < 0 || (option-1) > groupsList.size() - 1) {
             option = IO.readInt("\n  Escolha o seu grupo > ");
         }
 
-        clientManager.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
+        if (option == 0) {
+            clientManager.setAccessLevel(AccessLevel.BEFORE_LOGIN);
+            return;
+        } else {
+            clientManager.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
+            clientManager.setTargetGroupName(groupsList.get(option-1).getName());
+        }
 
-        clientManager.setTargetGroupName(groupsList.get(option-1).getName());
     }
 
     /**
@@ -170,7 +176,7 @@ public class ClientUI {
      * @throws Exception
      */
     private void groupActionsMenu() throws Exception {
-        int option;
+        int option = -2;
 
         String novoNome;
 
@@ -185,7 +191,6 @@ public class ClientUI {
                     String description;
                     int my_id = -1;
                     double value;
-                    int opt = -2;
                     List<Integer> debtors = new ArrayList<>();
                     List<ListedUser> users = GroupRequests.listGroupMembers(
                             clientManager.getTargetGroupName(),
@@ -215,19 +220,19 @@ public class ClientUI {
                     System.out.println("   \t0 - Terminar\n  \t-1 - Cancelar\n");
 
                     while (true) {
-                        opt = IO.readInt("   > ");
+                        option = IO.readInt("   > ");
 
-                        if (opt == 0 || opt == -1) { break; }
+                        if (option == 0 || option == -1) { break; }
                         else if (
-                                (opt-1) < users.size() && (opt-1) > -1 &&
-                                !debtors.contains(users.get(opt-1).getId())
+                                (option-1) < users.size() && (option-1) > -1 &&
+                                !debtors.contains(users.get(option-1).getId())
                         ) {
-                            debtors.add(users.get(opt-1).getId());
+                            debtors.add(users.get(option-1).getId());
                             System.out.println("Adicionei!");
                         }
                     }
 
-                    if (opt == -1) { break;}
+                    if (option == -1) { break;}
 
                     switch (
                             IO.chooseOption("Também vais pagar uma parte da despesa?", "", "Sim", "Não")
@@ -240,7 +245,6 @@ public class ClientUI {
                         default:
                             continue;
                     }
-
 
                     if (GroupRequests.addGroupExpense(
                             clientManager.getTargetGroupName(),
@@ -255,9 +259,9 @@ public class ClientUI {
                             clientManager.getUrl(),
                             clientManager.getToken()
                     )) {
-                        System.out.println("Despesa inserida com sucesso.");
+                        System.out.println("  Despesa inserida com sucesso.");
                     } else {
-                        System.out.println("Ocorreu um erro a inserir esta despesa.");
+                        System.out.println("  Ocorreu um erro a inserir esta despesa.");
                     }
 
                     break;
@@ -273,12 +277,12 @@ public class ClientUI {
                     );
 
                     System.out.println("\n  + Despesas ------------------------------+\n");
-                    for (ListedExpense l : list) {
-                        System.out.println(l.toString());
+                    for (int i = 0; i < list.size(); i++) {
+                        System.out.println("\t" + (i+1) + ".\n\t-----" + list.get(i).toString());
                     }
                     System.out.println("  +----------------------------------------+");
 
-                    System.out.println("Prima ENTER para continuar");
+                    System.out.println("  Prima ENTER para continuar");
                     System.in.read();
 
                     break;
@@ -287,6 +291,46 @@ public class ClientUI {
                     CASE ELIMINAR DESPESA
                     */
                 case 3:
+                    int ex_id = -1;
+                    List<ListedExpense> listToDelete = GroupRequests.listGroupExpenses(
+                            clientManager.getUrl(),
+                            clientManager.getTargetGroupName(),
+                            clientManager.getToken()
+                    );
+
+                    System.out.println("\n  + Despesas ------------------------------+\n");
+                    for (int i = 0; i < listToDelete.size(); i++) {
+                        System.out.println("\t" + (i+1) + ".\n\t-----" + listToDelete.get(i).toString());
+                    }
+                    System.out.println("\t0. Cancelar");
+                    System.out.println("  +----------------------------------------+");
+
+                    System.out.println("\n  Selecione a despesa que pretende eliminar");
+
+                    while (true) {
+                        option = IO.readInt("   > ");
+
+                        if (option == 0) { return; }
+
+                        if ((option-1) >= listToDelete.size() || (option-1) < 0) {
+                            continue;
+                        } else {
+                            ex_id = listToDelete.get(option-1).getId();
+                            break;
+                        }
+
+                    }
+
+                    if (GroupRequests.deleteGroupExpense(
+                            clientManager.getTargetGroupName(),
+                            ex_id,
+                            clientManager.getUrl(),
+                            clientManager.getToken()
+                    )) {
+                        System.out.println("  Despesa eliminada com sucesso");
+                    } else {
+                        System.out.println("  Ocorreu um erro ao eliminar a despesa.");
+                    }
 
                     break;
 

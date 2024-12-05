@@ -6,15 +6,14 @@ import pt.isec.pd.Client.Logic.ClientManager;
 import pt.isec.pd.Client.Logic.Requests.AuthRequests;
 import pt.isec.pd.Client.Logic.Requests.GroupRequests;
 import pt.isec.pd.Shared.AccessLevel;
-import pt.isec.pd.Shared.Entities.*;
+import pt.isec.pd.Shared.Entities.Group;
+import pt.isec.pd.Shared.Entities.ListedGroup;
+import pt.isec.pd.Shared.Entities.User;
 import pt.isec.pd.Shared.IO;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface de utilizador do cliente
@@ -153,22 +152,16 @@ public class ClientUI {
         System.out.println("\n +--------------------------- Os meus Grupos ---------------------------+ ");
 
         for (int i = 0; i < groupsList.size(); ++i) {
-            System.out.println("  " + (i+1) + " - " + groupsList.get(i).getName());
-        }
-        System.out.println("  0 - Voltar");
-
-        while ((option) < 0 || (option-1) > groupsList.size() - 1) {
-            option = IO.readInt("\n  Escolha o seu grupo > ");
+            System.out.println( "  " + (i+1) + ". " + groupsList.get(i).getName());
         }
 
-        if (option == 0) {
-            clientManager.setAccessLevel(AccessLevel.BEFORE_LOGIN);
-            return;
-        } else {
-            clientManager.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
-            clientManager.setTargetGroupName(groupsList.get(option-1).getName());
+        while (option < 0 || option > groupsList.size() - 1) {
+            option = IO.readInt("  > ");
         }
 
+        clientManager.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
+
+        clientManager.setTargetGroupName(groupsList.get(option-1).getName());
     }
 
     /**
@@ -176,170 +169,44 @@ public class ClientUI {
      * @throws Exception
      */
     private void groupActionsMenu() throws Exception {
-        int option = -2;
+        int option;
+
+        String invitee;
+        String expenseDescription;
+        double value;
+        ArrayList<Integer> groupMembersId;
 
         String novoNome;
 
         while (true) {
             switch (IO.chooseOption("+----------------------- Grupo " + clientManager.getTargetGroupName() + " ------------------------+ ",
-                    "",  "Adicionar Despesa", "Listar Despesas", "Eliminar despesa", "Voltar"
+                    "", "Alterar nome do grupo", "Convidar", "Adicionar Despesa", "Editar despesa",
+                    "Eliminar despesa", "Pagar despesa", "Listar histórico de despesas", "Listar Pagamentos",
+                    "Eliminar Pagamento", "Exportar Despesas para ficheiro CSV", "Ver total de gastos do grupo",
+                    "Ver saldo e informações", "Eliminar Grupo", "Sair do Grupo", "Voltar"
             )) {
+
+                /*
+                CASE ALTERAR NOME
+                 */
+                case 1:
+                    novoNome = IO.readString("   Novo nome > ", false);
+
+                    break;
+                /*
+                CASE CONVIDAR
+                 */
+                case 2:
+                    invitee = IO.readString("   E-mail do convidado > ", true);
+
+
+                    break;
+
                     /*
                     CASE ADICIONAR DESPESA
-                    */
-                case 1:
-                    String description;
-                    int my_id = -1;
-                    double value;
-                    List<Integer> debtors = new ArrayList<>();
-                    List<ListedUser> users = GroupRequests.listGroupMembers(
-                            clientManager.getTargetGroupName(),
-                            clientManager.getUrl(),
-                            clientManager.getToken()
-                    );
-
-                    for (ListedUser user : users) {
-                        if (user.getEmail().equals(clientManager.getEmail())) {
-                            my_id = user.getId();
-                        }
-                    }
-
-                    users.removeIf(user -> user.getEmail().equals(clientManager.getEmail()));
-
-                    description = IO.readString("  Descrição da despesa > ", false);
-                    do {
-                        value = IO.readNumber("  Valor da despesa > ");
-                    } while (value <= 0);
-
-                    System.out.println("  Com quem partilhar a despesa?");
-
-                    for (int i = 0; i < users.size(); i++) {
-                        System.out.println("   \t" + (i+1) + " - " + users.get(i).toString());
-                    }
-
-                    System.out.println("   \t0 - Terminar\n  \t-1 - Cancelar\n");
-
-                    while (true) {
-                        option = IO.readInt("   > ");
-
-                        if (option == 0 || option == -1) { break; }
-                        else if (
-                                (option-1) < users.size() && (option-1) > -1 &&
-                                !debtors.contains(users.get(option-1).getId())
-                        ) {
-                            debtors.add(users.get(option-1).getId());
-                            System.out.println("Adicionei!");
-                        }
-                    }
-
-                    if (option == -1) { break;}
-
-                    switch (
-                            IO.chooseOption("Também vais pagar uma parte da despesa?", "", "Sim", "Não")
-                    ) {
-                        case 1:
-                            if (my_id != -1) { debtors.add(my_id); }
-                            break;
-                        case 2:
-                            break;
-                        default:
-                            continue;
-                    }
-
-                    if (GroupRequests.addGroupExpense(
-                            clientManager.getTargetGroupName(),
-                            new Expense(
-                                    Date.valueOf(LocalDateTime.now().toLocalDate()),
-                                    description,
-                                    value,
-                                    my_id,
-                                    clientManager.getTargetGroupId(),
-                                    debtors
-                            ),
-                            clientManager.getUrl(),
-                            clientManager.getToken()
-                    )) {
-                        System.out.println("  Despesa inserida com sucesso.");
-                    } else {
-                        System.out.println("  Ocorreu um erro a inserir esta despesa.");
-                    }
-
-                    break;
-
-                    /*
-                    CASE LISTAR DESPESAS
-                    */
-                case 2:
-                    List<ListedExpense> list = GroupRequests.listGroupExpenses(
-                            clientManager.getUrl(),
-                            clientManager.getTargetGroupName(),
-                            clientManager.getToken()
-                    );
-
-                    System.out.println("\n  + Despesas ------------------------------+\n");
-                    for (int i = 0; i < list.size(); i++) {
-                        System.out.println("\t" + (i+1) + ".\n\t-----" + list.get(i).toString());
-                    }
-                    System.out.println("  +----------------------------------------+");
-
-                    System.out.println("  Prima ENTER para continuar");
-                    System.in.read();
-
-                    break;
-
-                    /*
-                    CASE ELIMINAR DESPESA
-                    */
+                     */
                 case 3:
-                    int ex_id = -1;
-                    List<ListedExpense> listToDelete = GroupRequests.listGroupExpenses(
-                            clientManager.getUrl(),
-                            clientManager.getTargetGroupName(),
-                            clientManager.getToken()
-                    );
 
-                    System.out.println("\n  + Despesas ------------------------------+\n");
-                    for (int i = 0; i < listToDelete.size(); i++) {
-                        System.out.println("\t" + (i+1) + ".\n\t-----" + listToDelete.get(i).toString());
-                    }
-                    System.out.println("\t0. Cancelar");
-                    System.out.println("  +----------------------------------------+");
-
-                    System.out.println("\n  Selecione a despesa que pretende eliminar");
-
-                    while (true) {
-                        option = IO.readInt("   > ");
-
-                        if (option == 0) { return; }
-
-                        if ((option-1) >= listToDelete.size() || (option-1) < 0) {
-                            continue;
-                        } else {
-                            ex_id = listToDelete.get(option-1).getId();
-                            break;
-                        }
-
-                    }
-
-                    if (GroupRequests.deleteGroupExpense(
-                            clientManager.getTargetGroupName(),
-                            ex_id,
-                            clientManager.getUrl(),
-                            clientManager.getToken()
-                    )) {
-                        System.out.println("  Despesa eliminada com sucesso");
-                    } else {
-                        System.out.println("  Ocorreu um erro ao eliminar a despesa.");
-                    }
-
-                    break;
-
-                    /*
-                    CASE VOLTAR
-                    */
-                case 4:
-                    clientManager.setAccessLevel(AccessLevel.BEFORE_GROUP_SELECT);
-                    return;
             }
         }
     }

@@ -15,6 +15,7 @@ public class MainClient {
 
         System.out.println("<Client> Bom dia!");
 
+
         ClientUI clientUI = new ClientUI(
                 new ClientManager(args[0], Integer.parseInt(args[1]))
         );

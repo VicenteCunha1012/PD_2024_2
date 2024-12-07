@@ -231,7 +231,9 @@ public class ClientUI {
                                         !debtors.contains(users.get(option-1).getId())
                         ) {
                             debtors.add(users.get(option-1).getId());
-                            System.out.println("Adicionei!");
+                            System.out.println("  " + users.get(option-1).getName() + " foi adicionado/a à despesa!");
+                        } else {
+                            System.out.println("  Esse utilizador não existe!");
                         }
                     }
 

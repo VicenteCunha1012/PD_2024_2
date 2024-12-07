@@ -34,7 +34,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider
             loginResult = false;
         }
 
-        if(loginResult) {
+        if (loginResult) {
             return new UsernamePasswordAuthenticationToken(username, password, List.of());
         }
         System.out.println("nao logged in");

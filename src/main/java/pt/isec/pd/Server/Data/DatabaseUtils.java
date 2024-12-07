@@ -257,7 +257,7 @@ public class DatabaseUtils {
         resetAttributes();
 
         double totalValue = getExpenseValue(expenseId, conn);
-        double shareValue = totalValue/userId_list.size();
+        double shareValue = Math.round(totalValue/userId_list.size() * 100.0) / 100.0;
 
         System.out.println(userId_list);
 
@@ -288,7 +288,7 @@ public class DatabaseUtils {
 
             updateCount = statement.getUpdateCount();
 
-            if (updateCount != 1) { return true; }
+            if (updateCount != 1) { return false; }
 
         }
 

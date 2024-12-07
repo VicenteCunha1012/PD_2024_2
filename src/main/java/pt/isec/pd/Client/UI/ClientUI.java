@@ -1,9 +1,8 @@
 package pt.isec.pd.Client.UI;
 
-import ch.qos.logback.core.net.server.Client;
-import org.springdoc.core.properties.SpringDocConfigProperties;
-import pt.isec.pd.Client.Logic.ClientManager;
+import pt.isec.pd.Client.Logic.Client;
 import pt.isec.pd.Client.Logic.Requests.AuthRequests;
+import pt.isec.pd.Client.Logic.Requests.ExpenseRequests;
 import pt.isec.pd.Client.Logic.Requests.GroupRequests;
 import pt.isec.pd.Shared.AccessLevel;
 import pt.isec.pd.Shared.Entities.*;
@@ -14,18 +13,16 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface de utilizador do cliente
  */
 public class ClientUI {
     public static boolean isRunning = true;
-    private String message = "";
-    private ClientManager clientManager;
+    private Client client;
 
-    public ClientUI(ClientManager clientManager) {
-        this.clientManager = clientManager;
+    public ClientUI(Client client) {
+        this.client = client;
     }
 
     /**
@@ -41,13 +38,7 @@ public class ClientUI {
         while(isRunning) {
             IO.clearScreen();
             try {
-                if(this.message != "") {
-                    System.out.println("--------------------------");
-                    System.out.println(this.message);
-                    this.message = "";
-                    System.out.println("--------------------------");
-                }
-                switch(clientManager.getAccessLevel()) {
+                switch(client.getAccessLevel()) {
                     case EXIT:
                         isRunning = false;
                         break;
@@ -78,6 +69,8 @@ public class ClientUI {
         String contacto;
         String password;
 
+        AuthRequests authRequests = new AuthRequests(client.getUrl());
+
         switch (IO.chooseOption(" +--------------------------- Menu Principal ---------------------------+ ", "",
                 "Registar", "Iniciar sessão", "Sair"
         )) {
@@ -91,10 +84,14 @@ public class ClientUI {
 
                 password = IO.readString("  Palavra-passe > ", false);
 
-                if (!AuthRequests.register(new User(userName, contacto, email, password), clientManager.getUrl())) {
-                    System.err.println("  Falha ao efetuar registo!");
+                if (!authRequests.register(new User(userName, contacto, email, password))) {
+                    System.out.println("  Falha ao efetuar registo!");
+                    System.out.println("  Prima ENTER para tentar novamente");
+                    System.in.read();
                 } else {
                     System.out.println("  Registado com successo!!");
+                    System.out.println("  Prima ENTER para continuar");
+                    System.in.read();
                 }
 
                 break;
@@ -104,14 +101,14 @@ public class ClientUI {
 
                 password = IO.readString("  Palavra-passe > ", false);
 
-                String token = AuthRequests.login(email, password, clientManager.getUrl());
+                String token = authRequests.login(email, password);
 
                 if (token == null) {
-                    System.err.println("  Nome de Utilizador ou Palavra-Passe incorreto!");
+                    System.out.println("  Nome de Utilizador ou Palavra-Passe incorreto!");
                 } else {
-                    clientManager.setToken(token);
-                    clientManager.setEmail(email);
-                    clientManager.setAccessLevel(AccessLevel.BEFORE_GROUP_SELECT);
+                    client.setToken(token);
+                    client.setEmail(email);
+                    client.setAccessLevel(AccessLevel.BEFORE_GROUP_SELECT);
                 }
 
                 break;
@@ -120,7 +117,7 @@ public class ClientUI {
                 break;
 
             default:
-                this.message = "Isso não é nada.🫤";
+                System.out.println("Isso não é nada.🫤");
 
         }
 
@@ -131,18 +128,20 @@ public class ClientUI {
      * @throws Exception
      */
     private void groupSelectMenu() throws Exception {
-        List<ListedGroup> groupsList;
         int option = -1;
+        List<ListedGroup> groupsList;
 
-        while ((groupsList = GroupRequests.listGroups(clientManager.getUrl(), clientManager.getEmail(), clientManager.getToken())) == null) {
+        GroupRequests groupRequests = new GroupRequests(client.getUrl());
+
+        while ((groupsList = groupRequests.listGroups(client.getToken())) == null) {
             switch (IO.chooseOption("  Falha ao listar os seus grupos", "", "Tentar novamente", "Terminar sessão", "Sair")) {
                 case 2:
-                    clientManager.setAccessLevel(AccessLevel.BEFORE_LOGIN);
-                    clientManager.setToken("");
+                    client.setAccessLevel(AccessLevel.BEFORE_LOGIN);
+                    client.setToken("");
                     break;
                 case 3:
                     this.isRunning = false;
-                    clientManager.setToken("");
+                    client.setToken("");
                     break;
                 default:
                     break;
@@ -162,11 +161,11 @@ public class ClientUI {
         }
 
         if (option == 0) {
-            clientManager.setAccessLevel(AccessLevel.BEFORE_LOGIN);
+            client.setAccessLevel(AccessLevel.BEFORE_LOGIN);
             return;
         } else {
-            clientManager.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
-            clientManager.setTargetGroupName(groupsList.get(option-1).getName());
+            client.setAccessLevel(AccessLevel.IN_GROUP_CONTEXT);
+            client.setTargetGroupName(groupsList.get(option-1).getName());
         }
 
     }
@@ -178,10 +177,11 @@ public class ClientUI {
     private void groupActionsMenu() throws Exception {
         int option = -2;
 
-        String novoNome;
+        ExpenseRequests expenseRequests = new ExpenseRequests(client.getUrl(), client.getTargetGroupName());
+        GroupRequests groupRequests = new GroupRequests(client.getUrl());
 
         while (true) {
-            switch (IO.chooseOption("+----------------------- Grupo " + clientManager.getTargetGroupName() + " ------------------------+ ",
+            switch (IO.chooseOption("+----------------------- Grupo " + client.getTargetGroupName() + " ------------------------+ ",
                     "",  "Adicionar Despesa", "Listar Despesas", "Eliminar despesa", "Voltar"
             )) {
                     /*
@@ -192,19 +192,22 @@ public class ClientUI {
                     int my_id = -1;
                     double value;
                     List<Integer> debtors = new ArrayList<>();
-                    List<ListedUser> users = GroupRequests.listGroupMembers(
-                            clientManager.getTargetGroupName(),
-                            clientManager.getUrl(),
-                            clientManager.getToken()
-                    );
+                    List<ListedUser> users = groupRequests.listGroupMembers(client.getTargetGroupName(), client.getToken());
+
+                    if (users == null) {
+                        System.out.println("  Erro ao listar os membros do grupo!!");
+                        System.out.println("  Prima ENTER para voltar!");
+                        System.in.read();
+                        return;
+                    }
 
                     for (ListedUser user : users) {
-                        if (user.getEmail().equals(clientManager.getEmail())) {
+                        if (user.getEmail().equals(client.getEmail())) {
                             my_id = user.getId();
                         }
                     }
 
-                    users.removeIf(user -> user.getEmail().equals(clientManager.getEmail()));
+                    users.removeIf(user -> user.getEmail().equals(client.getEmail()));
 
                     description = IO.readString("  Descrição da despesa > ", false);
                     do {
@@ -225,7 +228,7 @@ public class ClientUI {
                         if (option == 0 || option == -1) { break; }
                         else if (
                                 (option-1) < users.size() && (option-1) > -1 &&
-                                !debtors.contains(users.get(option-1).getId())
+                                        !debtors.contains(users.get(option-1).getId())
                         ) {
                             debtors.add(users.get(option-1).getId());
                             System.out.println("Adicionei!");
@@ -246,22 +249,24 @@ public class ClientUI {
                             continue;
                     }
 
-                    if (GroupRequests.addGroupExpense(
-                            clientManager.getTargetGroupName(),
+                    if (expenseRequests.addGroupExpense(
                             new Expense(
                                     Date.valueOf(LocalDateTime.now().toLocalDate()),
                                     description,
                                     value,
                                     my_id,
-                                    clientManager.getTargetGroupId(),
+                                    client.getTargetGroupId(),
                                     debtors
                             ),
-                            clientManager.getUrl(),
-                            clientManager.getToken()
+                            client.getToken()
                     )) {
                         System.out.println("  Despesa inserida com sucesso.");
+                        System.out.println("  Prima ENTER para continuar");
+                        System.in.read();
                     } else {
                         System.out.println("  Ocorreu um erro a inserir esta despesa.");
+                        System.out.println("  Prima ENTER para voltar");
+                        System.in.read();
                     }
 
                     break;
@@ -270,17 +275,17 @@ public class ClientUI {
                     CASE LISTAR DESPESAS
                     */
                 case 2:
-                    List<ListedExpense> list = GroupRequests.listGroupExpenses(
-                            clientManager.getUrl(),
-                            clientManager.getTargetGroupName(),
-                            clientManager.getToken()
-                    );
+                    List<ListedExpense> list = expenseRequests.listGroupExpenses(client.getToken());
 
-                    System.out.println("\n  + Despesas ------------------------------+\n");
-                    for (int i = 0; i < list.size(); i++) {
-                        System.out.println("\t" + (i+1) + ".\n\t-----" + list.get(i).toString());
+                    if (list == null) {
+                        System.out.println("  Algo de errado aconteceu ao listar as despesas do grupo '" + client.getTargetGroupName() + "'");
+                    } else {
+                        System.out.println("\n  + Despesas ------------------------------+\n");
+                        for (int i = 0; i < list.size(); i++) {
+                            System.out.println("\t" + (i+1) + ".\n\t-----" + list.get(i).toString());
+                        }
+                        System.out.println("  +----------------------------------------+");
                     }
-                    System.out.println("  +----------------------------------------+");
 
                     System.out.println("  Prima ENTER para continuar");
                     System.in.read();
@@ -292,44 +297,47 @@ public class ClientUI {
                     */
                 case 3:
                     int ex_id = -1;
-                    List<ListedExpense> listToDelete = GroupRequests.listGroupExpenses(
-                            clientManager.getUrl(),
-                            clientManager.getTargetGroupName(),
-                            clientManager.getToken()
-                    );
+                    List<ListedExpense> listToDelete = expenseRequests.listGroupExpenses(client.getToken());
 
-                    System.out.println("\n  + Despesas ------------------------------+\n");
-                    for (int i = 0; i < listToDelete.size(); i++) {
-                        System.out.println("\t" + (i+1) + ".\n\t-----" + listToDelete.get(i).toString());
-                    }
-                    System.out.println("\t0. Cancelar");
-                    System.out.println("  +----------------------------------------+");
+                    if (listToDelete == null) {
+                        System.out.println("  Algo de errado aconteceu ao listar as despesas do grupo '" + client.getTargetGroupName() + "'");
+                        System.out.println("  Prima ENTER para voltar");
+                        System.in.read();
+                        return;
+                    } else {
+                        System.out.println("\n  + Despesas ------------------------------+\n");
+                        for (int i = 0; i < listToDelete.size(); i++) {
+                            System.out.println("\t" + (i+1) + ".\n\t-----" + listToDelete.get(i).toString());
+                        }
+                        System.out.println("\t0. Cancelar");
+                        System.out.println("  +----------------------------------------+");
 
-                    System.out.println("\n  Selecione a despesa que pretende eliminar");
+                        System.out.println("\n  Selecione a despesa que pretende eliminar");
 
-                    while (true) {
-                        option = IO.readInt("   > ");
+                        while (true) {
+                            option = IO.readInt("   > ");
 
-                        if (option == 0) { return; }
+                            if (option == 0) { return; }
 
-                        if ((option-1) >= listToDelete.size() || (option-1) < 0) {
-                            continue;
-                        } else {
-                            ex_id = listToDelete.get(option-1).getId();
-                            break;
+                            if ((option-1) >= listToDelete.size() || (option-1) < 0) {
+                                continue;
+                            } else {
+                                ex_id = listToDelete.get(option-1).getId();
+                                break;
+                            }
+
                         }
 
-                    }
-
-                    if (GroupRequests.deleteGroupExpense(
-                            clientManager.getTargetGroupName(),
-                            ex_id,
-                            clientManager.getUrl(),
-                            clientManager.getToken()
-                    )) {
-                        System.out.println("  Despesa eliminada com sucesso");
-                    } else {
-                        System.out.println("  Ocorreu um erro ao eliminar a despesa.");
+                        if (expenseRequests.deleteGroupExpense(ex_id, client.getToken())) {
+                            System.out.println("  Despesa eliminada com sucesso");
+                            System.out.println("  Prima ENTER para continuar");
+                            System.in.read();
+                        } else {
+                            System.out.println("  Ocorreu um erro ao eliminar a despesa.");
+                            System.out.println("  Prima ENTER para voltar");
+                            System.in.read();
+                            return;
+                        }
                     }
 
                     break;
@@ -338,7 +346,7 @@ public class ClientUI {
                     CASE VOLTAR
                     */
                 case 4:
-                    clientManager.setAccessLevel(AccessLevel.BEFORE_GROUP_SELECT);
+                    client.setAccessLevel(AccessLevel.BEFORE_GROUP_SELECT);
                     return;
             }
         }

@@ -5,18 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76632e96-2a90-4769-9481-3fd73b0fc04a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedExpense.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedExpense.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/scripts/CreateScript.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/scripts/CreateScript.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/database/scripts/DataScript.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/scripts/DataScript.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -35,14 +47,19 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/ClientManager.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequests.java" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequests.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/AuthRequestHandler.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/ConnectionSetup.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/ExpenseRequestHandler.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/GroupRequestHandler.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/Logic/Requests/RequestMethod.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/PreparedStatementWrapper.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/AuthController.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/Expense.java" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Shared/Entities/ListedExpense.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/database/scripts/CreateScript.sql" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -53,29 +70,29 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;Application.MainClient.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.MainObservableClient.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.MainServer.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;jon&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/joaoa/Desktop/Escola/Projetos/ProjectPD - Java/Meta_1/Code&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Application.MainClient.executor": "Debug",
+    "Application.MainObservableClient.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.MainServer.executor": "Debug",
+    "git-widget-placeholder": "jon",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/jon/Desktop/Escola/Projetos/LibManager",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.MainClient">
     <configuration name="MainClient" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="pt.isec.pd.MainClient" />
@@ -111,8 +128,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
       </set>
     </attachedChunks>
   </component>
@@ -128,6 +145,11 @@
       <workItem from="1733337249231" duration="1116000" />
       <workItem from="1733342664718" duration="528000" />
       <workItem from="1733390493075" duration="3723000" />
+      <workItem from="1733571798651" duration="861000" />
+      <workItem from="1733572698326" duration="28000" />
+      <workItem from="1733572728629" duration="33000" />
+      <workItem from="1733572764715" duration="596000" />
+      <workItem from="1733573363365" duration="15654000" />
     </task>
     <servers />
   </component>
@@ -138,29 +160,39 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java</url>
-          <line>353</line>
-          <option name="timeStamp" value="17" />
+          <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java</url>
-          <line>342</line>
-          <option name="timeStamp" value="18" />
+          <line>353</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java</url>
+          <line>147</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/Controllers/GroupController.java</url>
+          <line>149</line>
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java</url>
           <line>348</line>
-          <option name="timeStamp" value="19" />
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java</url>
           <line>349</line>
-          <option name="timeStamp" value="20" />
+          <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Data/DatabaseUtils.java</url>
           <line>351</line>
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="49" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

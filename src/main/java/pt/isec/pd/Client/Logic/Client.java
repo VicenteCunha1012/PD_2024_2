@@ -2,7 +2,7 @@ package pt.isec.pd.Client.Logic;
 
 import pt.isec.pd.Shared.AccessLevel;
 
-public class ClientManager {
+public class Client {
     private String url;
     private String token;
     private String email;
@@ -10,7 +10,7 @@ public class ClientManager {
     private int targetGroupId;
     private AccessLevel accessLevel;
 
-    public ClientManager(String ip, int port) {
+    public Client(String ip, int port) {
         this.url = "http://" + ip + ':' + port;
         this.accessLevel = AccessLevel.BEFORE_LOGIN;
     }
@@ -46,6 +46,7 @@ public class ClientManager {
         this.targetGroupName = targetGroupName;
     }
 
+
     public int getTargetGroupId() {
         return targetGroupId;
     }
@@ -53,6 +54,7 @@ public class ClientManager {
     public void setTargetGroupId(int targetGroupId) {
         this.targetGroupId = targetGroupId;
     }
+
 
     public AccessLevel getAccessLevel() {
         return accessLevel;

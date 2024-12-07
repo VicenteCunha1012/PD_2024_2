@@ -1,6 +1,8 @@
 package pt.isec.pd.Client.Logic.Requests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pt.isec.pd.Client.Logic.Requests.Utils.ConnectionSetup;
+import pt.isec.pd.Client.Logic.Requests.Utils.RequestMethod;
 import pt.isec.pd.Shared.Entities.User;
 
 import java.io.*;
@@ -11,25 +13,19 @@ import java.net.http.HttpResponse;
 import java.util.Base64;
 
 public class AuthRequests {
-    private static String URL = "/api/auth";
+    private String url;
 
-    public static boolean register(User user, String url) {
-        URL requestUrl = null;
-        HttpURLConnection conn;
-        int responseCode;
+    public AuthRequests(String baseUrl) {
+        this.url = baseUrl + "/api/auth";
+    }
 
+    public boolean register(User user) {
         try {
-            requestUrl = new URL(url + URL + "/register");
-
-            try {
-                conn = (HttpURLConnection) requestUrl.openConnection();
-            } catch (ConnectException e) {
-                throw new Exception("Impossível conectar ao servidor!");
-            }
-
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setDoOutput(true);
+            HttpURLConnection conn = ConnectionSetup.setup(
+                    new URL(this.url + "/register"),
+                    RequestMethod.POST,
+                    null
+            );
 
             conn.connect();
 
@@ -41,27 +37,22 @@ public class AuthRequests {
                 os.write(input, 0, input.length);
             }
 
-            responseCode = conn.getResponseCode();
+            int responseCode = responseCode = conn.getResponseCode();
 
             if (conn != null) { conn.disconnect(); }
 
             return responseCode == HttpURLConnection.HTTP_OK;
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        } catch (Exception e) { return false; }
     }
 
-    public static String login(String email, String password, String url) {
-        String requestUrl = url + URL + "/login";
-
+    public String login(String email, String password) {
         try {
             String basicAuthHeader = "Basic " + Base64.getEncoder()
                     .encodeToString((email + ":" + password).getBytes());
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(requestUrl))
+                    .uri(URI.create(this.url + "/login"))
                     .header("Authorization", basicAuthHeader)
                     .POST(HttpRequest.BodyPublishers.noBody())
                     .build();

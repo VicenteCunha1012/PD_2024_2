@@ -1,6 +1,6 @@
 package pt.isec.pd;
 
-import pt.isec.pd.Client.Logic.ClientManager;
+import pt.isec.pd.Client.Logic.Client;
 import pt.isec.pd.Client.UI.ClientUI;
 
 import java.io.IOException;
@@ -13,10 +13,8 @@ public class MainClient {
             return;
         }
 
-        System.out.println("<Client> Bom dia!");
-
         ClientUI clientUI = new ClientUI(
-                new ClientManager(args[0], Integer.parseInt(args[1]))
+                new Client(args[0], Integer.parseInt(args[1]))
         );
 
         clientUI.start();

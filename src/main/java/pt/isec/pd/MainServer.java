@@ -88,13 +88,13 @@ public class MainServer {
 
 
     public static void main(String[] args) {
-        String APP_INFO_URI = "rmi://localhost:1099/get_app_info";
-        String NOTIFICATION_SERVER = "rmi://localhost:1099/update_server";
 
-        if (args.length != 1) {
-            System.out.println("Sintaxe java Servidor DBPath");
+        if (args.length != 3) {
+            System.out.println("Sintaxe java Servidor DBPath app_info_rmi noti_server_rmi");
             return;
         }
+        String APP_INFO_URI = args[1];
+        String NOTIFICATION_SERVER = args[2];
 
 
         File dbPath = new File(args[0]);

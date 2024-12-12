@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76632e96-2a90-4769-9481-3fd73b0fc04a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Client/UI/ClientUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/security/UserAuthenticationProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/Server/Springboot/security/UserAuthenticationProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pt/isec/pd/MainServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database/database.sqlite" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,29 +60,27 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "Application.MainClient.executor": "Run",
-    "Application.MainClient1.executor": "Run",
-    "Application.MainClient2.executor": "Debug",
-    "Application.MainObservableClient.executor": "Debug",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.MainServer.executor": "Run",
-    "git-widget-placeholder": "dev",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/jon/Desktop/Escola/Projetos/LibManager",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;Application.MainClient.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MainObservableClient.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.MainServer.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;vicente&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/joaoa/Desktop/Escola/Projetos/ProjectPD - Java/Meta_1/Code&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }]]></component>
   <component name="RunManager" selected="Application.MainClient1">
@@ -113,7 +111,7 @@
     <configuration name="MainServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="PD-2-testes" />
-      <option name="PROGRAM_PARAMETERS" value="src/main/resources/database/database.sqlite" />
+      <option name="PROGRAM_PARAMETERS" value="src/main/resources/database/database.sqlite rmi://localhost:1099/get_app_info rmi://localhost:1099/update_server" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="pt.isec.pd.MainServer" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -129,8 +127,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
       </set>
     </attachedChunks>
   </component>
@@ -146,11 +144,16 @@
       <workItem from="1733337249231" duration="1116000" />
       <workItem from="1733342664718" duration="528000" />
       <workItem from="1733390493075" duration="3723000" />
-      <workItem from="1733571798651" duration="861000" />
-      <workItem from="1733572698326" duration="28000" />
-      <workItem from="1733572728629" duration="33000" />
-      <workItem from="1733572764715" duration="596000" />
-      <workItem from="1733573363365" duration="15654000" />
+      <workItem from="1733417346619" duration="55000" />
+      <workItem from="1733423832880" duration="154000" />
+      <workItem from="1733614411571" duration="18000" />
+      <workItem from="1733614968895" duration="19000" />
+      <workItem from="1733751413255" duration="651000" />
+      <workItem from="1733752303205" duration="9000" />
+      <workItem from="1733932130064" duration="682000" />
+      <workItem from="1733942137735" duration="5000" />
+      <workItem from="1734022215657" duration="230000" />
+      <workItem from="1734025273455" duration="4000" />
     </task>
     <servers />
   </component>
